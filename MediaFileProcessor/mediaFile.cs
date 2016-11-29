@@ -28,9 +28,12 @@ namespace MediaFileProcessor
             _processPath();
             _getMovieData();
             //_setMetaData();
+        }
+        public void moveFile()
+        {
             _moveFileLocation();
             _deleteOldFile();
-        }        
+        } 
 
         private void _processPath()
         {
@@ -56,7 +59,9 @@ namespace MediaFileProcessor
             this.parentFolderName = fileName;
             if (this.parentFolderPath != modifiedFolderPath)
             { 
-                Directory.Move(this.parentFolderPath, modifiedFolderPath);
+                // windows rename work around
+                Directory.Move(this.parentFolderPath, modifiedFolderPath + "1");
+                Directory.Move(modifiedFolderPath + "1", modifiedFolderPath);
             }
             this.parentFolderPath = modifiedFolderPath;
             if ((File.GetAttributes(this.parentFolderPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)

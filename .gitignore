@@ -1,3 +1,4 @@
-MediaFileProcessor/obj/*
-MediaFileProcessor/bin/*
-packages/*
+*.suo
+**/obj/
+**/bin/
+**/packages/

@@ -13,6 +13,8 @@ namespace MediaFileProcessor
 {
     public partial class main : Form
     {
+        public List<MediaFile> files = new List<MediaFile>();
+
         public main()
         {
             InitializeComponent();
@@ -52,14 +54,20 @@ namespace MediaFileProcessor
             }
         }
 
-        private void addFile(string name)
+        private void addInfoFile(string name)
         {
-            fileList.Items.Add(name);
+            infoList.Items.Add(name);
+        }
+        private void addFinishedFile(string name)
+        {
+            infoList.Items.Add(name);
         }
 
         private void clearFileList()
         {
             fileList.Items.Clear();
+            infoList.Items.Clear();
+            files = new List<MediaFile>();
         }
         
         private void clear_Click(object sender, EventArgs e)
@@ -69,11 +77,34 @@ namespace MediaFileProcessor
 
         private void process_Click(object sender, EventArgs e)
         {
+            // this needs to process each file from the list of files
+            addInfoFile("Moving Files...");
+
+            foreach (MediaFile file in files)
+            {
+                file.moveFile();
+            }
+
+            addInfoFile("Move Complete...");
+            addInfoFile(Environment.NewLine);
+            addInfoFile("-------------------------------------");
+            addInfoFile(Environment.NewLine);
+        }
+
+        private void add_Click(object sender, EventArgs e)
+        {
+            // this adds the from file and the to location to the info list
+            if (files.Count == 0)
+            {
+                addInfoFile("Files to Move...");
+            }
+
             Cursor cursor = Cursor.Current;
             cursor = Cursors.WaitCursor;
             var newFile = new MediaFile(fromPath.Text, toPath.Text);
             newFile.setFileData();
-            addFile(newFile.fileName);
+            addInfoFile(newFile.fileName);
+            files.Add(newFile);
             cursor = Cursors.Arrow;
         }
     }

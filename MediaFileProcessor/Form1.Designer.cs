@@ -44,6 +44,10 @@
             this.fromDescrition = new System.Windows.Forms.Label();
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.infoList = new System.Windows.Forms.ListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.add = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -51,6 +55,7 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +80,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.add);
             this.splitContainer1.Panel2.Controls.Add(this.process);
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel2.Controls.Add(this.error);
@@ -121,8 +127,14 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.label1);
             this.splitContainer2.Panel1.Controls.Add(this.clear);
             this.splitContainer2.Panel1.Controls.Add(this.fileList);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.label2);
+            this.splitContainer2.Panel2.Controls.Add(this.infoList);
             this.splitContainer2.Size = new System.Drawing.Size(799, 285);
             this.splitContainer2.SplitterDistance = 328;
             this.splitContainer2.TabIndex = 7;
@@ -140,9 +152,9 @@
             // fileList
             // 
             this.fileList.FormattingEnabled = true;
-            this.fileList.Location = new System.Drawing.Point(14, 13);
+            this.fileList.Location = new System.Drawing.Point(14, 26);
             this.fileList.Name = "fileList";
-            this.fileList.Size = new System.Drawing.Size(300, 212);
+            this.fileList.Size = new System.Drawing.Size(300, 199);
             this.fileList.TabIndex = 0;
             // 
             // error
@@ -158,7 +170,7 @@
             // 
             // to
             // 
-            this.to.Location = new System.Drawing.Point(684, 49);
+            this.to.Location = new System.Drawing.Point(597, 49);
             this.to.Name = "to";
             this.to.Size = new System.Drawing.Size(106, 23);
             this.to.TabIndex = 3;
@@ -168,7 +180,7 @@
             // 
             // from
             // 
-            this.from.Location = new System.Drawing.Point(684, 11);
+            this.from.Location = new System.Drawing.Point(597, 10);
             this.from.Name = "from";
             this.from.Size = new System.Drawing.Size(106, 23);
             this.from.TabIndex = 2;
@@ -180,14 +192,14 @@
             // 
             this.toPath.Location = new System.Drawing.Point(86, 51);
             this.toPath.Name = "toPath";
-            this.toPath.Size = new System.Drawing.Size(592, 20);
+            this.toPath.Size = new System.Drawing.Size(505, 20);
             this.toPath.TabIndex = 1;
             // 
             // fromPath
             // 
             this.fromPath.Location = new System.Drawing.Point(86, 13);
             this.fromPath.Name = "fromPath";
-            this.fromPath.Size = new System.Drawing.Size(592, 20);
+            this.fromPath.Size = new System.Drawing.Size(505, 20);
             this.fromPath.TabIndex = 0;
             // 
             // toDescription
@@ -208,6 +220,42 @@
             this.fromDescrition.TabIndex = 4;
             this.fromDescrition.Text = "From File:";
             // 
+            // infoList
+            // 
+            this.infoList.FormattingEnabled = true;
+            this.infoList.Location = new System.Drawing.Point(14, 26);
+            this.infoList.Name = "infoList";
+            this.infoList.Size = new System.Drawing.Size(441, 251);
+            this.infoList.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(138, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Loaded Files";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(191, 10);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(100, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Loading Information";
+            // 
+            // add
+            // 
+            this.add.Location = new System.Drawing.Point(710, 10);
+            this.add.Name = "add";
+            this.add.Size = new System.Drawing.Size(80, 61);
+            this.add.TabIndex = 9;
+            this.add.Text = "Add To List";
+            this.add.UseVisualStyleBackColor = true;
+            this.add.Click += new System.EventHandler(this.add_Click);
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -226,6 +274,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -251,6 +302,10 @@
         private System.Windows.Forms.ListBox fileList;
         private System.Windows.Forms.Button clear;
         private System.Windows.Forms.Button process;
+        private System.Windows.Forms.Button add;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ListBox infoList;
     }
 }
 
