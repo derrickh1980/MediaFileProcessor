@@ -1,5 +1,4 @@
 C:\Development\github\MediaFileProcessor\MediaFileProcessor\bin\Debug\MediaFileProcessor.exe.config
-C:\Development\github\MediaFileProcessor\MediaFileProcessor\obj\Debug\MediaFileProcessor.Form1.resources
 C:\Development\github\MediaFileProcessor\MediaFileProcessor\obj\Debug\MediaFileProcessor.Properties.Resources.resources
 C:\Development\github\MediaFileProcessor\MediaFileProcessor\obj\Debug\MediaFileProcessor.csproj.GenerateResource.Cache
 C:\Development\github\MediaFileProcessor\MediaFileProcessor\bin\Debug\MediaFileProcessor.exe
@@ -12,3 +11,4 @@ C:\Development\github\MediaFileProcessor\MediaFileProcessor\bin\Debug\Newtonsoft
 C:\Development\github\MediaFileProcessor\MediaFileProcessor\bin\Debug\policy.2.0.taglib-sharp.dll
 C:\Development\github\MediaFileProcessor\MediaFileProcessor\bin\Debug\taglib-sharp.dll
 C:\Development\github\MediaFileProcessor\MediaFileProcessor\bin\Debug\policy.2.0.taglib-sharp.config
+C:\Development\github\MediaFileProcessor\MediaFileProcessor\obj\Debug\MediaFileProcessor.main.resources

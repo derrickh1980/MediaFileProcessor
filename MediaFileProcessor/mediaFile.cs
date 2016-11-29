@@ -147,7 +147,8 @@ namespace MediaFileProcessor
 
         private void _deleteOldFile()
         {
-            File.Delete(this.parentFolderPath);
+            File.Delete(this.filePath);
+            Directory.Delete(this.parentFolderPath);
         }
     }
 }

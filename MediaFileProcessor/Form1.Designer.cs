@@ -1,6 +1,6 @@
 ﻿namespace MediaFileProcessor
 {
-    partial class Form1
+    partial class main
     {
         /// <summary>
         /// Required designer variable.
@@ -31,6 +31,11 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.title = new System.Windows.Forms.Label();
+            this.process = new System.Windows.Forms.Button();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.clear = new System.Windows.Forms.Button();
+            this.fileList = new System.Windows.Forms.ListBox();
+            this.error = new System.Windows.Forms.Label();
             this.to = new System.Windows.Forms.Button();
             this.from = new System.Windows.Forms.Button();
             this.toPath = new System.Windows.Forms.TextBox();
@@ -39,11 +44,6 @@
             this.fromDescrition = new System.Windows.Forms.Label();
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.error = new System.Windows.Forms.Label();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.fileList = new System.Windows.Forms.ListBox();
-            this.clear = new System.Windows.Forms.Button();
-            this.process = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -102,6 +102,60 @@
             this.title.Text = "Media Center File Processor";
             this.title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // process
+            // 
+            this.process.Location = new System.Drawing.Point(4, 370);
+            this.process.Name = "process";
+            this.process.Size = new System.Drawing.Size(786, 60);
+            this.process.TabIndex = 8;
+            this.process.Text = "Process";
+            this.process.UseVisualStyleBackColor = true;
+            this.process.Click += new System.EventHandler(this.process_Click);
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer2.Location = new System.Drawing.Point(3, 78);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.clear);
+            this.splitContainer2.Panel1.Controls.Add(this.fileList);
+            this.splitContainer2.Size = new System.Drawing.Size(799, 285);
+            this.splitContainer2.SplitterDistance = 328;
+            this.splitContainer2.TabIndex = 7;
+            // 
+            // clear
+            // 
+            this.clear.Location = new System.Drawing.Point(14, 231);
+            this.clear.Name = "clear";
+            this.clear.Size = new System.Drawing.Size(300, 42);
+            this.clear.TabIndex = 1;
+            this.clear.Text = "Clear Files List";
+            this.clear.UseVisualStyleBackColor = true;
+            this.clear.Click += new System.EventHandler(this.clear_Click);
+            // 
+            // fileList
+            // 
+            this.fileList.FormattingEnabled = true;
+            this.fileList.Location = new System.Drawing.Point(14, 13);
+            this.fileList.Name = "fileList";
+            this.fileList.Size = new System.Drawing.Size(300, 212);
+            this.fileList.TabIndex = 0;
+            // 
+            // error
+            // 
+            this.error.AutoSize = true;
+            this.error.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.error.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.error.ForeColor = System.Drawing.Color.DarkRed;
+            this.error.Location = new System.Drawing.Point(0, 416);
+            this.error.Name = "error";
+            this.error.Size = new System.Drawing.Size(0, 17);
+            this.error.TabIndex = 6;
+            // 
             // to
             // 
             this.to.Location = new System.Drawing.Point(684, 49);
@@ -154,68 +208,16 @@
             this.fromDescrition.TabIndex = 4;
             this.fromDescrition.Text = "From File:";
             // 
-            // error
-            // 
-            this.error.AutoSize = true;
-            this.error.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.error.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.error.ForeColor = System.Drawing.Color.DarkRed;
-            this.error.Location = new System.Drawing.Point(0, 416);
-            this.error.Name = "error";
-            this.error.Size = new System.Drawing.Size(0, 17);
-            this.error.TabIndex = 6;
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer2.Location = new System.Drawing.Point(3, 78);
-            this.splitContainer2.Name = "splitContainer2";
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.clear);
-            this.splitContainer2.Panel1.Controls.Add(this.fileList);
-            this.splitContainer2.Size = new System.Drawing.Size(799, 285);
-            this.splitContainer2.SplitterDistance = 328;
-            this.splitContainer2.TabIndex = 7;
-            // 
-            // fileList
-            // 
-            this.fileList.FormattingEnabled = true;
-            this.fileList.Location = new System.Drawing.Point(14, 13);
-            this.fileList.Name = "fileList";
-            this.fileList.Size = new System.Drawing.Size(300, 212);
-            this.fileList.TabIndex = 0;
-            // 
-            // clear
-            // 
-            this.clear.Location = new System.Drawing.Point(14, 231);
-            this.clear.Name = "clear";
-            this.clear.Size = new System.Drawing.Size(300, 42);
-            this.clear.TabIndex = 1;
-            this.clear.Text = "Clear Files List";
-            this.clear.UseVisualStyleBackColor = true;
-            this.clear.Click += new System.EventHandler(this.clear_Click);
-            // 
-            // process
-            // 
-            this.process.Location = new System.Drawing.Point(4, 370);
-            this.process.Name = "process";
-            this.process.Size = new System.Drawing.Size(786, 60);
-            this.process.TabIndex = 8;
-            this.process.Text = "Process";
-            this.process.UseVisualStyleBackColor = true;
-            this.process.Click += new System.EventHandler(this.process_Click);
-            // 
-            // Form1
+            // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.LightSlateGray;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(827, 510);
             this.Controls.Add(this.panel1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "main";
+            this.Text = "Media Center File Processor";
             this.panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
