@@ -55,13 +55,12 @@ namespace MediaFileProcessor
             filePathNodes = this.parentFolderPath.Split('\\');
             this.parentFolderName = filePathNodes[filePathNodes.Length - 1];
             string modifiedFolderPath = this.parentFolderPath.Replace(this.parentFolderName, fileName);
-            this.filePath = this.filePath.Replace('\\' + this.fileName + '\\', '\\' + fileName + '\\');
+            this.filePath = modifiedFolderPath + '\\' + this.fileName + this.ext;
             this.parentFolderName = fileName;
             if (this.parentFolderPath != modifiedFolderPath)
             { 
                 // windows rename work around
-                Directory.Move(this.parentFolderPath, modifiedFolderPath + "1");
-                Directory.Move(modifiedFolderPath + "1", modifiedFolderPath);
+                Directory.Move(this.parentFolderPath, modifiedFolderPath);
             }
             this.parentFolderPath = modifiedFolderPath;
             if ((File.GetAttributes(this.parentFolderPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
@@ -153,7 +152,25 @@ namespace MediaFileProcessor
         private void _deleteOldFile()
         {
             File.Delete(this.filePath);
+            try { 
             Directory.Delete(this.parentFolderPath);
+            }
+            catch (Exception ex)
+            {
+                //if (ex.Message.Contains("not empty"))
+                //{
+                //    _processOtherFiles();
+                //}
+            }
+        }
+
+        private void _processOtherFiles()
+        {
+            // need to check for subs
+            // if subs are found, change the name of the file and move it to the parent folder
+
+            // need to delete all other files
+
         }
     }
 }

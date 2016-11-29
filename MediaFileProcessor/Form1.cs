@@ -93,12 +93,7 @@ namespace MediaFileProcessor
 
         private void add_Click(object sender, EventArgs e)
         {
-            // this adds the from file and the to location to the info list
-            if (files.Count == 0)
-            {
-                addInfoFile("Files to Move...");
-            }
-
+            // this adds the from file and the to location to the info list            
             Cursor cursor = Cursor.Current;
             cursor = Cursors.WaitCursor;
             var newFile = new MediaFile(fromPath.Text, toPath.Text);

@@ -240,11 +240,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(191, 10);
+            this.label2.Location = new System.Drawing.Point(217, 10);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 13);
+            this.label2.Size = new System.Drawing.Size(39, 13);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Loading Information";
+            this.label2.Text = "Queue";
             // 
             // add
             // 
@@ -252,7 +252,7 @@
             this.add.Name = "add";
             this.add.Size = new System.Drawing.Size(80, 61);
             this.add.TabIndex = 9;
-            this.add.Text = "Add To List";
+            this.add.Text = "Add To Queue";
             this.add.UseVisualStyleBackColor = true;
             this.add.Click += new System.EventHandler(this.add_Click);
             // 
