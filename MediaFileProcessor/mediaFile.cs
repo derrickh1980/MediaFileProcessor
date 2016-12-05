@@ -91,7 +91,7 @@ namespace MediaFileProcessor
                 foreach (string part in nameParts)
                 {
                     int yr;
-                    if (int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060)
+                    if ((int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060) || (part == "1080p"))
                     {
                         // this is the year (probably), get out
                         this.year = part;
