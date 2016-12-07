@@ -45,7 +45,7 @@ namespace MediaFileProcessor
                 string folder = openFolderDialog.SelectedPath;
                 try
                 {
-                    toPath.Text = folder;                    
+                    toPath.Text = folder;                               
                 }
                 catch (IOException ex)
                 {
@@ -101,6 +101,18 @@ namespace MediaFileProcessor
             addInfoFile(newFile.fileName);
             files.Add(newFile);
             cursor = Cursors.Arrow;
+        }
+
+        private void processName_Click(object sender, EventArgs e)
+        {
+            //TODO - this needs to do a few things here...            
+            //must work on the last file in the files list            
+            MediaFile file = files[files.Count - 1];
+            //first - reprocess the file name per the selected delimiter
+            file.setFileData();
+
+            //second - remove the old name from the queue and add the new name
+
         }
     }
 }

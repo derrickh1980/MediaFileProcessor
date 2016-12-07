@@ -98,6 +98,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\loading.gif" />
+    <Content Include="images\refresh-arrow-icon.png" />
+    <Content Include="images\refresh.jpg" />
     <None Include="Resources\loading.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
