@@ -31,13 +31,14 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.title = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.delimiter = new System.Windows.Forms.Label();
-            this.delimiterOptions = new System.Windows.Forms.ComboBox();
             this.processName = new System.Windows.Forms.Button();
+            this.add = new System.Windows.Forms.Button();
+            this.delimiterOptions = new System.Windows.Forms.ComboBox();
             this.processedName = new System.Windows.Forms.TextBox();
             this.fileName = new System.Windows.Forms.Label();
             this.process = new System.Windows.Forms.Button();
-            this.add = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.label1 = new System.Windows.Forms.Label();
             this.clear = new System.Windows.Forms.Button();
@@ -53,7 +54,6 @@
             this.fromDescrition = new System.Windows.Forms.Label();
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -122,6 +122,15 @@
             this.title.Text = "Media Center File Processor";
             this.title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(57, 80);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(88, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Processed Name";
+            // 
             // delimiter
             // 
             this.delimiter.AutoSize = true;
@@ -130,14 +139,6 @@
             this.delimiter.Size = new System.Drawing.Size(47, 13);
             this.delimiter.TabIndex = 14;
             this.delimiter.Text = "Delimiter";
-            // 
-            // delimiterOptions
-            // 
-            this.delimiterOptions.FormattingEnabled = true;
-            this.delimiterOptions.Location = new System.Drawing.Point(678, 96);
-            this.delimiterOptions.Name = "delimiterOptions";
-            this.delimiterOptions.Size = new System.Drawing.Size(121, 21);
-            this.delimiterOptions.TabIndex = 13;
             // 
             // processName
             // 
@@ -152,6 +153,24 @@
             this.processName.TabIndex = 12;
             this.processName.UseVisualStyleBackColor = false;
             this.processName.Click += new System.EventHandler(this.processName_Click);
+            // 
+            // add
+            // 
+            this.add.Location = new System.Drawing.Point(60, 123);
+            this.add.Name = "add";
+            this.add.Size = new System.Drawing.Size(612, 32);
+            this.add.TabIndex = 9;
+            this.add.Text = "Add To Queue";
+            this.add.UseVisualStyleBackColor = true;
+            this.add.Click += new System.EventHandler(this.add_Click);
+            // 
+            // delimiterOptions
+            // 
+            this.delimiterOptions.FormattingEnabled = true;
+            this.delimiterOptions.Location = new System.Drawing.Point(678, 96);
+            this.delimiterOptions.Name = "delimiterOptions";
+            this.delimiterOptions.Size = new System.Drawing.Size(121, 21);
+            this.delimiterOptions.TabIndex = 13;
             // 
             // processedName
             // 
@@ -179,16 +198,6 @@
             this.process.Text = "Process";
             this.process.UseVisualStyleBackColor = true;
             this.process.Click += new System.EventHandler(this.process_Click);
-            // 
-            // add
-            // 
-            this.add.Location = new System.Drawing.Point(60, 123);
-            this.add.Name = "add";
-            this.add.Size = new System.Drawing.Size(612, 32);
-            this.add.TabIndex = 9;
-            this.add.Text = "Add To Queue";
-            this.add.UseVisualStyleBackColor = true;
-            this.add.Click += new System.EventHandler(this.add_Click);
             // 
             // splitContainer2
             // 
@@ -317,15 +326,6 @@
             this.fromDescrition.Size = new System.Drawing.Size(52, 13);
             this.fromDescrition.TabIndex = 4;
             this.fromDescrition.Text = "From File:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(57, 80);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 13);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "Processed Name";
             // 
             // main
             // 

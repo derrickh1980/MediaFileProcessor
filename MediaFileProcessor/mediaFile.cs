@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Web;
@@ -14,6 +15,7 @@ namespace MediaFileProcessor
         }
 
         public string delimiter { get; set; }
+        public string[] delimiterOptions { get; set; }
         public string ext { get; set; }
         public string fileName { get; set; }
         public string filePath { get; set; }
@@ -105,13 +107,13 @@ namespace MediaFileProcessor
         {
             // need to determine if the name is not in proper form
 
-            string[] nameParts = name.Split('.');
-            if (nameParts.Length > 2)
+            this.delimiterOptions = name.Split('.');
+            if (this.delimiterOptions.Length > 2)
             {
                 // now to strip down the name
                 var remasteredName = "";
                 int count = 1;
-                foreach (string part in nameParts)
+                foreach (string part in this.delimiterOptions)
                 {
                     count++;
                     if (this.delimiter != null)
@@ -145,16 +147,16 @@ namespace MediaFileProcessor
                     
                 }
 
-                if (count == nameParts.Length)
+                if (count == this.delimiterOptions.Length)
                 {
-                    this.delimiter = nameParts[0];
+                    this.delimiter = this.delimiterOptions[0];
                 }
                 return remasteredName.Trim();
             }
             else
             {
                 //TODO: may end up here when changing a name                
-                return nameParts[0];
+                return this.delimiterOptions[0];
             }
         }
 

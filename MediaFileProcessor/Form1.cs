@@ -118,6 +118,7 @@ namespace MediaFileProcessor
             }
             addInfoFile(currentFile.fileName);
             files.Add(currentFile);
+            fromPath.Text = "";
         }
 
         private void processName_Click(object sender, EventArgs e)
@@ -125,6 +126,30 @@ namespace MediaFileProcessor
             if (currentFile != null)
             {
                 oldFile = new MediaFile(currentFile.filePath, currentFile.movePath);
+            }
+            else
+            {
+                int count = 0;
+
+                // add "Custom" as the first delimiter
+                ComboboxItem item = new ComboboxItem();
+                item.Text = "Custom";
+                item.Value = count;
+                count++;
+
+                // add the rest of the options
+                foreach (string delimiter in currentFile.delimiterOptions)
+                {
+                    item = new ComboboxItem();
+                    item.Text = delimiter;
+                    item.Value = count;
+                    delimiterOptions.Items.Add(item);
+                    if (delimiter == currentFile.delimiter)
+                    {
+                        delimiterOptions.SelectedIndex = count;
+                    }
+                    count++;
+                }
             }
             currentFile = new MediaFile(fromPath.Text, toPath.Text);
             processName.Text = currentFile.processTempName();
@@ -141,6 +166,17 @@ namespace MediaFileProcessor
             {
                 add.Enabled = false;
             }
+        }
+    }
+
+    public class ComboboxItem
+    {
+        public string Text { get; set; }
+        public object Value { get; set; }
+
+        public override string ToString()
+        {
+            return Text;
         }
     }
 }
