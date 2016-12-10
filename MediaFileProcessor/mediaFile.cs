@@ -1,9 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Web;
-using System.Linq;
-using Newtonsoft.Json.Linq;
-using System;
 
 namespace MediaFileProcessor
 {
@@ -21,6 +19,7 @@ namespace MediaFileProcessor
         public string filePath { get; set; }
         public Movie movieData { get; set; }
         public string movePath { get; set; }
+        public string originalPath { get; set; }
         public string parentFolderName { get; set; }
         public string parentFolderPath { get; set; }
         public string year { get; set; }
@@ -28,7 +27,7 @@ namespace MediaFileProcessor
         public void setFileData(bool initial)
         {
             // first check for read only            
-            _processPath(initial);            
+            _processPath(initial);
             _getMovieData();
             //_setMetaData();
         }
@@ -66,10 +65,17 @@ namespace MediaFileProcessor
 
         private void _getMovieData()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://www.omdbapi.com?" + HttpUtility.ParseQueryString("t=" + this.fileName));
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            this.movieData = new Movie(content);
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://www.omdbapi.com?" + HttpUtility.ParseQueryString("t=" + this.fileName));
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                this.movieData = new Movie(content);
+            }
+            catch (Exception ex)
+            {
+                // do nothing here...
+            }
         }
 
         private void _moveFileLocation()
@@ -80,7 +86,7 @@ namespace MediaFileProcessor
                 Directory.CreateDirectory(this.movePath + "\\" + this.parentFolderName);
                 File.Move(this.filePath, modifiedPath);
             }
-        }        
+        }
 
         private string _processName()
         {
@@ -107,7 +113,7 @@ namespace MediaFileProcessor
                     else
                     {
                         remasteredName += part + " ";
-                    }                    
+                    }
                 }
 
                 if (count == nameParts.Length)
@@ -136,6 +142,7 @@ namespace MediaFileProcessor
             //TODO - this needs to be re-factored here
             if (initial)
             {
+                this.originalPath = this.filePath;
                 string[] filePathNodes = this.filePath.Split('\\');
 
                 // set the file name
@@ -175,7 +182,8 @@ namespace MediaFileProcessor
                 {
                     File.SetAttributes(this.filePath, FileAttributes.ReadOnly);
                 }
-            } else
+            }
+            else
             {
 
             }
@@ -185,7 +193,8 @@ namespace MediaFileProcessor
         {
             //TODO
             //this doesn't work... there has to be a better way
-            try {
+            try
+            {
                 TagLib.File file = TagLib.File.Create(this.filePath);
                 file.Tag.Title = this.movieData.Title;
                 TagLib.Riff.MovieIdTag tag = (TagLib.Riff.MovieIdTag)file.GetTag(TagLib.TagTypes.MovieId);
@@ -199,6 +208,6 @@ namespace MediaFileProcessor
             {
                 var a = ex;
             }
-        }            
+        }
     };
 }

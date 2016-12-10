@@ -14,6 +14,7 @@ namespace MediaFileProcessor
     public partial class main : Form
     {
         public List<MediaFile> files = new List<MediaFile>();
+        public MediaFile currentFile = null;
 
         public main()
         {
@@ -29,6 +30,7 @@ namespace MediaFileProcessor
                 try
                 {
                     fromPath.Text = file;
+                    checkAddEnabled();
                 }
                 catch (IOException ex)
                 {
@@ -45,7 +47,8 @@ namespace MediaFileProcessor
                 string folder = openFolderDialog.SelectedPath;
                 try
                 {
-                    toPath.Text = folder;                               
+                    toPath.Text = folder;
+                    checkAddEnabled();
                 }
                 catch (IOException ex)
                 {
@@ -58,6 +61,11 @@ namespace MediaFileProcessor
         {
             infoList.Items.Add(name);
         }
+
+        private void removeInfoFile(string name)
+        {
+            infoList.Items.Remove(name);
+        }
         private void addFinishedFile(string name)
         {
             infoList.Items.Add(name);
@@ -69,7 +77,7 @@ namespace MediaFileProcessor
             infoList.Items.Clear();
             files = new List<MediaFile>();
         }
-        
+
         private void clear_Click(object sender, EventArgs e)
         {
             clearFileList();
@@ -83,6 +91,7 @@ namespace MediaFileProcessor
             foreach (MediaFile file in files)
             {
                 file.moveFile();
+                addFinishedFile(file.fileName);
             }
 
             addInfoFile("Move Complete...");
@@ -93,26 +102,46 @@ namespace MediaFileProcessor
 
         private void add_Click(object sender, EventArgs e)
         {
-            // this adds the from file and the to location to the info list            
-            Cursor cursor = Cursor.Current;
-            cursor = Cursors.WaitCursor;
-            var newFile = new MediaFile(fromPath.Text, toPath.Text);
-            newFile.setFileData();
-            addInfoFile(newFile.fileName);
-            files.Add(newFile);
-            cursor = Cursors.Arrow;
+            // this adds the from file and the to location to the info list                                    
+            addInfoFile(currentFile.fileName);
+            files.Add(currentFile);
         }
 
         private void processName_Click(object sender, EventArgs e)
         {
-            //TODO - this needs to do a few things here...            
-            //must work on the last file in the files list            
-            MediaFile file = files[files.Count - 1];
-            //first - reprocess the file name per the selected delimiter
-            file.setFileData();
+            if (processedName.Text != "")
+            {                
+                // need to save the old name for removal after processing
+                string previousName = currentFile.fileName;
 
-            //second - remove the old name from the queue and add the new name
+                //first - reprocess the file name per the selected delimiter
+                currentFile.delimeter = delimiterOptions.SelectedText;
+                currentFile.setFileData(false);
 
+                //second - remove the old name from the queue and add the new name
+                removeInfoFile(previousName);
+
+                //third - set the new processed name in the text box
+                processedName.Text = currentFile.fileName;
+            }
+            else
+            {
+                currentFile = new MediaFile(fromPath.Text, toPath.Text);
+                currentFile.setFileData(true);
+            }
+        }
+
+        private void checkAddEnabled()
+        {
+            // check to see if the add button should be enabled or not
+            if (fromPath.Text != "" && toPath.Text != "" && processedName.Text != "")
+            {
+                add.Enabled = true;
+            }
+            else
+            {
+                add.Enabled = false;
+            }
         }
     }
 }
