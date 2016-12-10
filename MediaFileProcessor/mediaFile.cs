@@ -13,17 +13,30 @@ namespace MediaFileProcessor
             this.movePath = movePath;
         }
 
-        public string delimeter { get; set; }
+        public string delimiter { get; set; }
         public string ext { get; set; }
         public string fileName { get; set; }
         public string filePath { get; set; }
         public Movie movieData { get; set; }
         public string movePath { get; set; }
-        public string originalPath { get; set; }
         public string parentFolderName { get; set; }
         public string parentFolderPath { get; set; }
         public string year { get; set; }
 
+        public string processTempName()
+        {
+            string[] filePathNodes = this.filePath.Split('\\');
+
+            // set the file name
+            string tempFileName = filePathNodes[filePathNodes.Length - 1];
+
+            string[] nameParts = this.fileName.Split('.');
+            string tempExt = '.' + nameParts[nameParts.Length - 1];
+            tempFileName = tempFileName.Replace(tempExt, "");
+
+            int index = this.filePath.IndexOf('\\' + tempFileName + this.ext);
+            return _processName(tempFileName);            
+        }
         public void setFileData(bool initial)
         {
             // first check for read only            
@@ -88,11 +101,11 @@ namespace MediaFileProcessor
             }
         }
 
-        private string _processName()
+        private string _processName(string name)
         {
             // need to determine if the name is not in proper form
 
-            string[] nameParts = this.fileName.Split('.');
+            string[] nameParts = name.Split('.');
             if (nameParts.Length > 2)
             {
                 // now to strip down the name
@@ -101,29 +114,46 @@ namespace MediaFileProcessor
                 foreach (string part in nameParts)
                 {
                     count++;
-                    int yr = 0;
-                    if ((int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060) || (part == "1080p"))
+                    if (this.delimiter != null)
                     {
-                        this.delimeter = part;
+                        // this is the first run so do the default processing
+                        int yr = 0;
+                        if ((int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060) || (part == "1080p"))
+                        {
+                            this.delimiter = part;
 
-                        // this is the year (probably), get out
-                        this.year = part;
-                        break;
+                            // this is the year (probably), get out
+                            this.year = part;
+                            break;
+                        }
+                        else
+                        {
+                            remasteredName += part + " ";
+                        }
                     }
-                    else
-                    {
-                        remasteredName += part + " ";
+                    else 
+                    {                       
+                        if (part == this.delimiter)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            remasteredName += part + " ";
+                        }
                     }
+                    
                 }
 
                 if (count == nameParts.Length)
                 {
-                    this.delimeter = nameParts[0];
+                    this.delimiter = nameParts[0];
                 }
                 return remasteredName.Trim();
             }
             else
             {
+                //TODO: may end up here when changing a name                
                 return nameParts[0];
             }
         }
@@ -138,24 +168,22 @@ namespace MediaFileProcessor
         }
 
         private void _processPath(bool initial)
-        {
-            //TODO - this needs to be re-factored here
+        {            
             if (initial)
             {
-                this.originalPath = this.filePath;
                 string[] filePathNodes = this.filePath.Split('\\');
 
                 // set the file name
-                this.fileName = filePathNodes[filePathNodes.Length - 1];
+                string tempFileName = filePathNodes[filePathNodes.Length - 1];
 
-                string[] nameParts = this.fileName.Split('.');
+                string[] nameParts = tempFileName.Split('.');
                 this.ext = '.' + nameParts[nameParts.Length - 1];
-                this.fileName = this.fileName.Replace(this.ext, "");
+                tempFileName = tempFileName.Replace(this.ext, "");
 
                 // set the parent path
-                int index = this.filePath.IndexOf('\\' + this.fileName + this.ext);
-                this.parentFolderPath = (index < 0) ? "" : this.filePath.Remove(index, this.fileName.Length + 5);
-                string fileName = _processName();
+                int index = this.filePath.IndexOf('\\' + tempFileName + this.ext);
+                this.parentFolderPath = (index < 0) ? "" : this.filePath.Remove(index, tempFileName.Length + 5);
+                string fileName = this.fileName;
 
                 // set the new parent folder name
                 filePathNodes = this.parentFolderPath.Split('\\');
@@ -175,7 +203,6 @@ namespace MediaFileProcessor
                 }
                 string modifiedFilePath = modifiedFolderPath + '\\' + fileName + this.ext;
                 File.Move(this.filePath, modifiedFilePath);
-                this.fileName = fileName;
                 this.filePath = modifiedFilePath;
 
                 if ((File.GetAttributes(this.filePath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
@@ -185,7 +212,27 @@ namespace MediaFileProcessor
             }
             else
             {
+                string modifiedFolderPath = this.parentFolderPath.Replace(this.parentFolderName, fileName);
+                this.filePath = modifiedFolderPath + '\\' + this.fileName + this.ext;
+                this.parentFolderName = fileName;
+                if (this.parentFolderPath != modifiedFolderPath)
+                {
+                    // windows rename work around
+                    Directory.Move(this.parentFolderPath, modifiedFolderPath);
+                }
+                this.parentFolderPath = modifiedFolderPath;
+                if ((File.GetAttributes(this.parentFolderPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                {
+                    File.SetAttributes(this.parentFolderPath, FileAttributes.ReadOnly);
+                }
+                string modifiedFilePath = modifiedFolderPath + '\\' + fileName + this.ext;
+                File.Move(this.filePath, modifiedFilePath);
+                this.filePath = modifiedFilePath;
 
+                if ((File.GetAttributes(this.filePath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                {
+                    File.SetAttributes(this.filePath, FileAttributes.ReadOnly);
+                }
             }
         }
 

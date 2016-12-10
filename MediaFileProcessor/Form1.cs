@@ -15,6 +15,7 @@ namespace MediaFileProcessor
     {
         public List<MediaFile> files = new List<MediaFile>();
         public MediaFile currentFile = null;
+        public MediaFile oldFile = null;
 
         public main()
         {
@@ -102,33 +103,31 @@ namespace MediaFileProcessor
 
         private void add_Click(object sender, EventArgs e)
         {
-            // this adds the from file and the to location to the info list                                    
+            // this adds the from file and the to location to the info list    
+            if (!files.Contains(currentFile))
+            {
+                currentFile.fileName = processedName.Text;
+                currentFile.setFileData(true);
+            }
+            else
+            {
+                // this file has already been added before
+                files.RemoveAll(file => file.filePath == oldFile.filePath);
+                removeInfoFile(oldFile.fileName);
+                currentFile.setFileData(false);
+            }
             addInfoFile(currentFile.fileName);
             files.Add(currentFile);
         }
 
         private void processName_Click(object sender, EventArgs e)
         {
-            if (processedName.Text != "")
-            {                
-                // need to save the old name for removal after processing
-                string previousName = currentFile.fileName;
-
-                //first - reprocess the file name per the selected delimiter
-                currentFile.delimeter = delimiterOptions.SelectedText;
-                currentFile.setFileData(false);
-
-                //second - remove the old name from the queue and add the new name
-                removeInfoFile(previousName);
-
-                //third - set the new processed name in the text box
-                processedName.Text = currentFile.fileName;
-            }
-            else
+            if (currentFile != null)
             {
-                currentFile = new MediaFile(fromPath.Text, toPath.Text);
-                currentFile.setFileData(true);
+                oldFile = new MediaFile(currentFile.filePath, currentFile.movePath);
             }
+            currentFile = new MediaFile(fromPath.Text, toPath.Text);
+            processName.Text = currentFile.processTempName();
         }
 
         private void checkAddEnabled()
