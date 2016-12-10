@@ -104,6 +104,10 @@ namespace MediaFileProcessor
         private void add_Click(object sender, EventArgs e)
         {
             // this adds the from file and the to location to the info list    
+            if (customFolderName.Text.Count() > 0)
+            {
+                currentFile.parentFolderNameCustom = customFolderName.Text;
+            }
             if (!files.Contains(currentFile))
             {
                 currentFile.fileName = processedName.Text;
@@ -165,6 +169,19 @@ namespace MediaFileProcessor
             else
             {
                 add.Enabled = false;
+            }
+        }
+
+        private void processedName_TextChanged(object sender, EventArgs e)
+        {
+            if (delimiterOptions.SelectedIndex == 0)
+            {
+                processedName.SelectAll();
+            }
+            else
+            {
+                //TODO: maybe throw a message here...
+                delimiterOptions.Focus();
             }
         }
     }

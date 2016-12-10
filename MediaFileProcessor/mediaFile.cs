@@ -22,6 +22,7 @@ namespace MediaFileProcessor
         public Movie movieData { get; set; }
         public string movePath { get; set; }
         public string parentFolderName { get; set; }
+        public string parentFolderNameCustom { get; set; }
         public string parentFolderPath { get; set; }
         public string year { get; set; }
 
@@ -189,8 +190,18 @@ namespace MediaFileProcessor
 
                 // set the new parent folder name
                 filePathNodes = this.parentFolderPath.Split('\\');
-                this.parentFolderName = filePathNodes[filePathNodes.Length - 1];
-                string modifiedFolderPath = this.parentFolderPath.Replace(this.parentFolderName, fileName);
+                string modifiedFolderPath = "";
+                string tempParentFolderName = filePathNodes[filePathNodes.Length - 1];
+                if (this.parentFolderNameCustom == "" || this.parentFolderNameCustom == null)
+                {
+                    this.parentFolderName = tempParentFolderName;
+                    modifiedFolderPath = this.parentFolderPath.Replace(tempParentFolderName, fileName);
+                }
+                else
+                {
+                    modifiedFolderPath = this.parentFolderPath.Replace(tempParentFolderName, this.parentFolderNameCustom);
+                }
+                
                 this.filePath = modifiedFolderPath + '\\' + this.fileName + this.ext;
                 this.parentFolderName = fileName;
                 if (this.parentFolderPath != modifiedFolderPath)
@@ -214,9 +225,19 @@ namespace MediaFileProcessor
             }
             else
             {
-                string modifiedFolderPath = this.parentFolderPath.Replace(this.parentFolderName, fileName);
+                string modifiedFolderPath = "";
+                
+                if (this.parentFolderNameCustom == "" || this.parentFolderNameCustom == null)
+                {                    
+                    modifiedFolderPath = this.parentFolderPath.Replace(this.parentFolderName, this.fileName);
+                    this.parentFolderName = this.fileName;
+                }
+                else
+                {
+                    modifiedFolderPath = this.parentFolderPath.Replace(this.parentFolderName, this.parentFolderNameCustom);
+                    this.parentFolderName = this.parentFolderNameCustom;
+                }
                 this.filePath = modifiedFolderPath + '\\' + this.fileName + this.ext;
-                this.parentFolderName = fileName;
                 if (this.parentFolderPath != modifiedFolderPath)
                 {
                     // windows rename work around

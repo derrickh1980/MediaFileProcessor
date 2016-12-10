@@ -54,6 +54,9 @@
             this.fromDescrition = new System.Windows.Forms.Label();
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.folderName = new System.Windows.Forms.Label();
+            this.customFolderName = new System.Windows.Forms.TextBox();
+            this.customerParentName = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -70,7 +73,7 @@
             this.panel1.Controls.Add(this.splitContainer1);
             this.panel1.Location = new System.Drawing.Point(13, 13);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(802, 576);
+            this.panel1.Size = new System.Drawing.Size(802, 711);
             this.panel1.TabIndex = 0;
             // 
             // splitContainer1
@@ -88,6 +91,9 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.customerParentName);
+            this.splitContainer1.Panel2.Controls.Add(this.customFolderName);
+            this.splitContainer1.Panel2.Controls.Add(this.folderName);
             this.splitContainer1.Panel2.Controls.Add(this.label3);
             this.splitContainer1.Panel2.Controls.Add(this.delimiter);
             this.splitContainer1.Panel2.Controls.Add(this.processName);
@@ -104,8 +110,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.fromPath);
             this.splitContainer1.Panel2.Controls.Add(this.toDescription);
             this.splitContainer1.Panel2.Controls.Add(this.fromDescrition);
-            this.splitContainer1.Size = new System.Drawing.Size(802, 608);
-            this.splitContainer1.SplitterDistance = 59;
+            this.splitContainer1.Size = new System.Drawing.Size(802, 743);
+            this.splitContainer1.SplitterDistance = 72;
             this.splitContainer1.TabIndex = 0;
             // 
             // title
@@ -125,7 +131,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(57, 80);
+            this.label3.Location = new System.Drawing.Point(76, 119);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(88, 13);
             this.label3.TabIndex = 15;
@@ -134,7 +140,7 @@
             // delimiter
             // 
             this.delimiter.AutoSize = true;
-            this.delimiter.Location = new System.Drawing.Point(675, 80);
+            this.delimiter.Location = new System.Drawing.Point(382, 80);
             this.delimiter.Name = "delimiter";
             this.delimiter.Size = new System.Drawing.Size(47, 13);
             this.delimiter.TabIndex = 14;
@@ -147,18 +153,18 @@
             this.processName.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.processName.Cursor = System.Windows.Forms.Cursors.Hand;
             this.processName.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.processName.Location = new System.Drawing.Point(678, 123);
+            this.processName.Location = new System.Drawing.Point(678, 96);
             this.processName.Name = "processName";
-            this.processName.Size = new System.Drawing.Size(121, 32);
+            this.processName.Size = new System.Drawing.Size(121, 112);
             this.processName.TabIndex = 12;
             this.processName.UseVisualStyleBackColor = false;
             this.processName.Click += new System.EventHandler(this.processName_Click);
             // 
             // add
             // 
-            this.add.Location = new System.Drawing.Point(60, 123);
+            this.add.Location = new System.Drawing.Point(3, 238);
             this.add.Name = "add";
-            this.add.Size = new System.Drawing.Size(612, 32);
+            this.add.Size = new System.Drawing.Size(796, 32);
             this.add.TabIndex = 9;
             this.add.Text = "Add To Queue";
             this.add.UseVisualStyleBackColor = true;
@@ -167,22 +173,23 @@
             // delimiterOptions
             // 
             this.delimiterOptions.FormattingEnabled = true;
-            this.delimiterOptions.Location = new System.Drawing.Point(678, 96);
+            this.delimiterOptions.Location = new System.Drawing.Point(385, 96);
             this.delimiterOptions.Name = "delimiterOptions";
-            this.delimiterOptions.Size = new System.Drawing.Size(121, 21);
+            this.delimiterOptions.Size = new System.Drawing.Size(287, 21);
             this.delimiterOptions.TabIndex = 13;
             // 
             // processedName
             // 
-            this.processedName.Location = new System.Drawing.Point(60, 96);
+            this.processedName.Location = new System.Drawing.Point(79, 135);
             this.processedName.Name = "processedName";
-            this.processedName.Size = new System.Drawing.Size(612, 20);
+            this.processedName.Size = new System.Drawing.Size(593, 20);
             this.processedName.TabIndex = 11;
+            this.processedName.TextChanged += new System.EventHandler(this.processedName_TextChanged);
             // 
             // fileName
             // 
             this.fileName.AutoSize = true;
-            this.fileName.Location = new System.Drawing.Point(-3, 99);
+            this.fileName.Location = new System.Drawing.Point(16, 138);
             this.fileName.Name = "fileName";
             this.fileName.Size = new System.Drawing.Size(57, 13);
             this.fileName.TabIndex = 10;
@@ -191,7 +198,7 @@
             // process
             // 
             this.process.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.process.Location = new System.Drawing.Point(3, 445);
+            this.process.Location = new System.Drawing.Point(3, 567);
             this.process.Name = "process";
             this.process.Size = new System.Drawing.Size(796, 60);
             this.process.TabIndex = 8;
@@ -203,7 +210,7 @@
             // 
             this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer2.Location = new System.Drawing.Point(0, 154);
+            this.splitContainer2.Location = new System.Drawing.Point(0, 276);
             this.splitContainer2.Name = "splitContainer2";
             // 
             // splitContainer2.Panel1
@@ -270,7 +277,7 @@
             this.error.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.error.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.error.ForeColor = System.Drawing.Color.DarkRed;
-            this.error.Location = new System.Drawing.Point(0, 528);
+            this.error.Location = new System.Drawing.Point(0, 650);
             this.error.Name = "error";
             this.error.Size = new System.Drawing.Size(0, 17);
             this.error.TabIndex = 6;
@@ -297,22 +304,22 @@
             // 
             // toPath
             // 
-            this.toPath.Location = new System.Drawing.Point(60, 48);
+            this.toPath.Location = new System.Drawing.Point(79, 48);
             this.toPath.Name = "toPath";
-            this.toPath.Size = new System.Drawing.Size(612, 20);
+            this.toPath.Size = new System.Drawing.Size(593, 20);
             this.toPath.TabIndex = 1;
             // 
             // fromPath
             // 
-            this.fromPath.Location = new System.Drawing.Point(60, 17);
+            this.fromPath.Location = new System.Drawing.Point(79, 17);
             this.fromPath.Name = "fromPath";
-            this.fromPath.Size = new System.Drawing.Size(612, 20);
+            this.fromPath.Size = new System.Drawing.Size(593, 20);
             this.fromPath.TabIndex = 0;
             // 
             // toDescription
             // 
             this.toDescription.AutoSize = true;
-            this.toDescription.Location = new System.Drawing.Point(-3, 51);
+            this.toDescription.Location = new System.Drawing.Point(18, 51);
             this.toDescription.Name = "toDescription";
             this.toDescription.Size = new System.Drawing.Size(55, 13);
             this.toDescription.TabIndex = 5;
@@ -321,11 +328,36 @@
             // fromDescrition
             // 
             this.fromDescrition.AutoSize = true;
-            this.fromDescrition.Location = new System.Drawing.Point(-3, 20);
+            this.fromDescrition.Location = new System.Drawing.Point(21, 20);
             this.fromDescrition.Name = "fromDescrition";
             this.fromDescrition.Size = new System.Drawing.Size(52, 13);
             this.fromDescrition.TabIndex = 4;
             this.fromDescrition.Text = "From File:";
+            // 
+            // folderName
+            // 
+            this.folderName.AutoSize = true;
+            this.folderName.Location = new System.Drawing.Point(3, 191);
+            this.folderName.Name = "folderName";
+            this.folderName.Size = new System.Drawing.Size(70, 13);
+            this.folderName.TabIndex = 16;
+            this.folderName.Text = "Folder Name:";
+            // 
+            // customFolderName
+            // 
+            this.customFolderName.Location = new System.Drawing.Point(79, 188);
+            this.customFolderName.Name = "customFolderName";
+            this.customFolderName.Size = new System.Drawing.Size(593, 20);
+            this.customFolderName.TabIndex = 17;
+            // 
+            // customerParentName
+            // 
+            this.customerParentName.AutoSize = true;
+            this.customerParentName.Location = new System.Drawing.Point(79, 169);
+            this.customerParentName.Name = "customerParentName";
+            this.customerParentName.Size = new System.Drawing.Size(152, 13);
+            this.customerParentName.TabIndex = 18;
+            this.customerParentName.Text = "Customize Parent Folder Name";
             // 
             // main
             // 
@@ -333,7 +365,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSlateGray;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(827, 601);
+            this.ClientSize = new System.Drawing.Size(827, 717);
             this.Controls.Add(this.panel1);
             this.Name = "main";
             this.Text = "Media Center File Processor";
@@ -383,6 +415,9 @@
         private System.Windows.Forms.Label fileName;
         private System.Windows.Forms.Label delimiter;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label customerParentName;
+        private System.Windows.Forms.TextBox customFolderName;
+        private System.Windows.Forms.Label folderName;
     }
 }
 
