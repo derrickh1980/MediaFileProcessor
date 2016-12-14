@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediaFileProcessor
+namespace MediaFileProcessor.Models
 {
     public class Movie
     {
