@@ -31,7 +31,6 @@ namespace MediaFileProcessor
                 try
                 {
                     fromPath.Text = file;
-                    checkAddEnabled();
                 }
                 catch (IOException ex)
                 {
@@ -104,21 +103,24 @@ namespace MediaFileProcessor
         private void add_Click(object sender, EventArgs e)
         {
             // this adds the from file and the to location to the info list    
-            if (customFolderName.Text.Count() > 0)
-            {
-                currentFile.parentFolderNameCustom = customFolderName.Text;
-            }
+
+            // set the custom folder name here - always
+            currentFile.parentFolderNameCustom = customFolderName.Text;
+
             if (!files.Contains(currentFile))
             {
                 currentFile.fileName = processedName.Text;
-                currentFile.setFileData(true);
+                currentFile.setPreData();
             }
             else
-            {
+            {            
+                //TODO!!!!
+                // debug this, not sure what if anything needs to happen here......
+
                 // this file has already been added before
                 files.RemoveAll(file => file.filePath == oldFile.filePath);
                 removeInfoFile(oldFile.fileName);
-                currentFile.setFileData(false);
+                currentFile.setPreData();
             }
             addInfoFile(currentFile.fileName);
             files.Add(currentFile);
@@ -127,36 +129,56 @@ namespace MediaFileProcessor
 
         private void processName_Click(object sender, EventArgs e)
         {
-            if (currentFile != null)
+            if (delimiterOptions.SelectedIndex != 0 || processedName.Text == "")
             {
-                oldFile = new MediaFile(currentFile.filePath, currentFile.movePath);
-            }
-            else
-            {
-                int count = 0;
-
-                // add "Custom" as the first delimiter
-                ComboboxItem item = new ComboboxItem();
-                item.Text = "Custom";
-                item.Value = count;
-                count++;
-
-                // add the rest of the options
-                foreach (string delimiter in currentFile.delimiterOptions)
+                if (currentFile != null)
                 {
-                    item = new ComboboxItem();
-                    item.Text = delimiter;
+                    oldFile = new MediaFile(currentFile.filePath, currentFile.movePath);
+
+                    currentFile.delimiter = delimiterOptions.Text;
+                    if (delimiterOptions.SelectedIndex == 0 && processedName.Text == "")
+                    {
+                        currentFile.delimiter = null;
+                    }
+                    processedName.Text = currentFile.processTempName();
+                    delimiterOptions.Text = currentFile.delimiter;
+
+                    files.RemoveAll(file => file.filePath == oldFile.filePath);
+                }
+                else
+                {
+                    currentFile = new MediaFile(fromPath.Text, toPath.Text);
+                    processedName.Text = currentFile.processTempName();
+
+                    // start at 1 because 0 is added by default
+                    int count = 1;
+                    int tempIndex = 0;
+
+                    // add "Custom" as the first delimiter
+                    ComboboxItem item = new ComboboxItem();
+
+                    // add the rest of the options
+                    foreach (string delimiter in currentFile.delimiterOptions)
+                    {
+                        item = new ComboboxItem();
+                        item.Text = delimiter;
+                        item.Value = count;
+                        delimiterOptions.Items.Add(item);
+                        if (delimiter == currentFile.delimiter)
+                        {
+                            tempIndex = count;
+                        }
+                        count++;
+                    }
+
+                    // add None to the end so the user can just leave the name alone
+                    item.Text = "None";
                     item.Value = count;
                     delimiterOptions.Items.Add(item);
-                    if (delimiter == currentFile.delimiter)
-                    {
-                        delimiterOptions.SelectedIndex = count;
-                    }
-                    count++;
+
+                    delimiterOptions.SelectedIndex = tempIndex;
                 }
             }
-            currentFile = new MediaFile(fromPath.Text, toPath.Text);
-            processName.Text = currentFile.processTempName();
         }
 
         private void checkAddEnabled()
@@ -174,15 +196,45 @@ namespace MediaFileProcessor
 
         private void processedName_TextChanged(object sender, EventArgs e)
         {
-            if (delimiterOptions.SelectedIndex == 0)
-            {
-                processedName.SelectAll();
-            }
-            else
+            if (delimiterOptions.SelectedIndex > 0)
             {
                 //TODO: maybe throw a message here...
                 delimiterOptions.Focus();
             }
+        }
+
+        private void delimiterOptions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (delimiterOptions.SelectedIndex == 0)
+            {
+                processedName.Enabled = true;
+                processedName.Text = "";
+            }
+            else if (delimiterOptions.SelectedIndex == currentFile.delimiterOptions.Length + 1)
+            {
+                currentFile.delimiter = "This is some random text that will never happen";
+                processedName.Enabled = false;
+                processedName.Text = currentFile.processTempName();
+            }
+            else
+            {
+                processedName.Enabled = false;
+                oldFile = new MediaFile(currentFile.filePath, currentFile.movePath);
+
+                currentFile.delimiter = delimiterOptions.Text;
+                processedName.Text = currentFile.processTempName();
+            }
+        }
+
+        private void fromPath_TextChanged(object sender, EventArgs e)
+        {
+            processedName.Enabled = true;
+            delimiterOptions.Items.Clear();
+            ComboboxItem item = new ComboboxItem();
+            item.Text = "Custom";
+            item.Value = 0;
+            delimiterOptions.Items.Add(item);
+            delimiterOptions.SelectedIndex = 0;
         }
     }
 

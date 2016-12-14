@@ -21,6 +21,8 @@ namespace MediaFileProcessor
         public string filePath { get; set; }
         public Movie movieData { get; set; }
         public string movePath { get; set; }
+        public string originalFileName { get; set; }
+        public string originalParentFolderName { get; set; }
         public string parentFolderName { get; set; }
         public string parentFolderNameCustom { get; set; }
         public string parentFolderPath { get; set; }
@@ -33,51 +35,25 @@ namespace MediaFileProcessor
             // set the file name
             string tempFileName = filePathNodes[filePathNodes.Length - 1];
 
-            string[] nameParts = this.fileName.Split('.');
+            string[] nameParts = tempFileName.Split('.');
             string tempExt = '.' + nameParts[nameParts.Length - 1];
             tempFileName = tempFileName.Replace(tempExt, "");
 
-            int index = this.filePath.IndexOf('\\' + tempFileName + this.ext);
-            return _processName(tempFileName);            
+            return _processName(tempFileName);
         }
-        public void setFileData(bool initial)
+        
+        public void setPreData()
         {
-            // first check for read only            
-            _processPath(initial);
-            _getMovieData();
-            //_setMetaData();
+            _processor.preProcessor(this);
         }
+
         public void moveFile()
         {
-            _moveFileLocation();
-            _deleteOldFile();
+            _getMovieData();
+            _processor.postProcessor(this);
         }
 
-        private void _deleteOldFile()
-        {
-            File.Delete(this.filePath);
-            try
-            {
-                Directory.Delete(this.parentFolderPath);
-            }
-            catch (Exception ex)
-            {
-                //if (ex.Message.Contains("not empty"))
-                //{
-                //    _processOtherFiles();
-                //}
-            }
-        }
-
-        private void _doParent()
-        {
-
-        }
-
-        private void _doFile()
-        {
-
-        }
+        private FileProcessor _processor = new FileProcessor();               
 
         private void _getMovieData()
         {
@@ -94,20 +70,9 @@ namespace MediaFileProcessor
             }
         }
 
-        private void _moveFileLocation()
-        {
-            if (this.movePath != null && this.movePath != "")
-            {
-                string modifiedPath = this.movePath + "\\" + this.parentFolderName + "\\" + this.fileName + this.ext;
-                Directory.CreateDirectory(this.movePath + "\\" + this.parentFolderName);
-                File.Move(this.filePath, modifiedPath);
-            }
-        }
-
         private string _processName(string name)
         {
             // need to determine if the name is not in proper form
-
             this.delimiterOptions = name.Split('.');
             if (this.delimiterOptions.Length > 2)
             {
@@ -117,7 +82,7 @@ namespace MediaFileProcessor
                 foreach (string part in this.delimiterOptions)
                 {
                     count++;
-                    if (this.delimiter != null)
+                    if (this.delimiter == null)
                     {
                         // this is the first run so do the default processing
                         int yr = 0;
@@ -134,8 +99,8 @@ namespace MediaFileProcessor
                             remasteredName += part + " ";
                         }
                     }
-                    else 
-                    {                       
+                    else
+                    {
                         if (part == this.delimiter)
                         {
                             break;
@@ -145,7 +110,7 @@ namespace MediaFileProcessor
                             remasteredName += part + " ";
                         }
                     }
-                    
+
                 }
 
                 if (count == this.delimiterOptions.Length)
@@ -163,100 +128,15 @@ namespace MediaFileProcessor
 
         private void _processOtherFiles()
         {
+            //TODO!!!
+            // need to deal with this sometime soon
+
+
             // need to check for subs
             // if subs are found, change the name of the file and move it to the parent folder
 
             // need to delete all other files
 
-        }
-
-        private void _processPath(bool initial)
-        {            
-            if (initial)
-            {
-                string[] filePathNodes = this.filePath.Split('\\');
-
-                // set the file name
-                string tempFileName = filePathNodes[filePathNodes.Length - 1];
-
-                string[] nameParts = tempFileName.Split('.');
-                this.ext = '.' + nameParts[nameParts.Length - 1];
-                tempFileName = tempFileName.Replace(this.ext, "");
-
-                // set the parent path
-                int index = this.filePath.IndexOf('\\' + tempFileName + this.ext);
-                this.parentFolderPath = (index < 0) ? "" : this.filePath.Remove(index, tempFileName.Length + 5);
-                string fileName = this.fileName;
-
-                // set the new parent folder name
-                filePathNodes = this.parentFolderPath.Split('\\');
-                string modifiedFolderPath = "";
-                string tempParentFolderName = filePathNodes[filePathNodes.Length - 1];
-                if (this.parentFolderNameCustom == "" || this.parentFolderNameCustom == null)
-                {
-                    this.parentFolderName = tempParentFolderName;
-                    modifiedFolderPath = this.parentFolderPath.Replace(tempParentFolderName, fileName);
-                }
-                else
-                {
-                    modifiedFolderPath = this.parentFolderPath.Replace(tempParentFolderName, this.parentFolderNameCustom);
-                }
-                
-                this.filePath = modifiedFolderPath + '\\' + this.fileName + this.ext;
-                this.parentFolderName = fileName;
-                if (this.parentFolderPath != modifiedFolderPath)
-                {
-                    // windows rename work around
-                    Directory.Move(this.parentFolderPath, modifiedFolderPath);
-                }
-                this.parentFolderPath = modifiedFolderPath;
-                if ((File.GetAttributes(this.parentFolderPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                {
-                    File.SetAttributes(this.parentFolderPath, FileAttributes.ReadOnly);
-                }
-                string modifiedFilePath = modifiedFolderPath + '\\' + fileName + this.ext;
-                File.Move(this.filePath, modifiedFilePath);
-                this.filePath = modifiedFilePath;
-
-                if ((File.GetAttributes(this.filePath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                {
-                    File.SetAttributes(this.filePath, FileAttributes.ReadOnly);
-                }
-            }
-            else
-            {
-                string modifiedFolderPath = "";
-                
-                if (this.parentFolderNameCustom == "" || this.parentFolderNameCustom == null)
-                {                    
-                    modifiedFolderPath = this.parentFolderPath.Replace(this.parentFolderName, this.fileName);
-                    this.parentFolderName = this.fileName;
-                }
-                else
-                {
-                    modifiedFolderPath = this.parentFolderPath.Replace(this.parentFolderName, this.parentFolderNameCustom);
-                    this.parentFolderName = this.parentFolderNameCustom;
-                }
-                this.filePath = modifiedFolderPath + '\\' + this.fileName + this.ext;
-                if (this.parentFolderPath != modifiedFolderPath)
-                {
-                    // windows rename work around
-                    Directory.Move(this.parentFolderPath, modifiedFolderPath);
-                }
-                this.parentFolderPath = modifiedFolderPath;
-                if ((File.GetAttributes(this.parentFolderPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                {
-                    File.SetAttributes(this.parentFolderPath, FileAttributes.ReadOnly);
-                }
-                string modifiedFilePath = modifiedFolderPath + '\\' + fileName + this.ext;
-                File.Move(this.filePath, modifiedFilePath);
-                this.filePath = modifiedFilePath;
-
-                if ((File.GetAttributes(this.filePath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                {
-                    File.SetAttributes(this.filePath, FileAttributes.ReadOnly);
-                }
-            }
         }
 
         private void _setMetaData()
