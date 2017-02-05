@@ -130,7 +130,14 @@ namespace MediaFileProcessor
 
             foreach (MediaFile file in files)
             {
-                file.moveFile();
+                try
+                {
+                    file.moveFile();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
                 addFinishedFile(file.fileName);
             }
 

@@ -54,7 +54,12 @@ namespace MediaFileProcessor.Utilities
 
             // rename the file
             string modifiedFilePath = file.filePath.Replace(file.originalFileName + file.ext, file.fileName + file.ext);
+            try { 
             File.Move(file.filePath, modifiedFilePath);
+            } catch (System.IO.FileNotFoundException error)
+            {
+                throw (error);
+            }
 
             // set the file path to reflect the name change
             file.filePath = modifiedFilePath;
