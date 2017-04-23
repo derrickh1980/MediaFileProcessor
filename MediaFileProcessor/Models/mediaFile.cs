@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Web;
+using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 
 namespace MediaFileProcessor.Models
 {
@@ -42,7 +44,7 @@ namespace MediaFileProcessor.Models
 
             return _processName(tempFileName);
         }
-        
+
         public void setPreData()
         {
             _processor.preProcessor(this);
@@ -50,17 +52,17 @@ namespace MediaFileProcessor.Models
 
         public void moveFile()
         {
-            _getMovieData();
+            _setMetaData();
             _processor.postProcessor(this);
         }
 
-        private FileProcessor _processor = new FileProcessor();               
+        private FileProcessor _processor = new FileProcessor();
 
         private void _getMovieData()
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://www.omdbapi.com?" + HttpUtility.ParseQueryString("t=" + this.fileName));
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://www.omdbapi.com?" + HttpUtility.ParseQueryString("t=Star Wars Rebels Fighter Flight"));
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
                 this.movieData = new Movie(content);
@@ -87,9 +89,9 @@ namespace MediaFileProcessor.Models
                     {
                         // this is the first run so do the default processing
                         int yr = 0;
-                        if ((int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060) || (part == "1080p"))
+                        if ((int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060) || (part == "1080p") || (part == "720p") || (part == "WEBRiP"))
                         {
-                            this.delimiter = part;                            
+                            this.delimiter = part;
                             break;
                         }
                         else
@@ -139,18 +141,79 @@ namespace MediaFileProcessor.Models
 
         private void _setMetaData()
         {
-            //TODO
-            //this doesn't work... there has to be a better way
             try
             {
-                TagLib.File file = TagLib.File.Create(this.filePath);
-                file.Tag.Title = this.movieData.Title;
-                TagLib.Riff.MovieIdTag tag = (TagLib.Riff.MovieIdTag)file.GetTag(TagLib.TagTypes.MovieId);
-                tag.SetValue("Id", this.movieData.imdbID);
-                tag.SetValue("Title", this.movieData.Title);
-                tag.SetValue("Year", this.movieData.Year);
-                tag.SetValue("Genre", this.movieData.Genre);
-                tag.SetValue("Parental rating", this.movieData.Rated);
+
+                _getMovieData();
+
+                List<string> arrHeaders = new List<string>();
+
+                Shell32.Shell shell = new Shell32.Shell();
+                Shell32.Folder objFolder;
+
+                objFolder = shell.NameSpace(this.parentFolderPath);
+
+                for (int i = 0; i < short.MaxValue; i++)
+                {
+                    string header = objFolder.GetDetailsOf(null, i);
+                    if (String.IsNullOrEmpty(header))
+                        break;
+                    arrHeaders.Add(header);
+                }
+
+                // TODO - This could be used to do all the processing... 
+                // say there is a folder with subtitles in it, that could be processed here.
+                // In the case of TV series this could process all the files all at once instead of 
+                // having to pick each one and set it's title the processor could do it for me.
+                // Would need a more robust name processor since the names of TV series files are 
+                // much harder to deal with on the server.
+
+                // for now just pick off the one that is being processed and set it's meta-data.
+
+                // here we are looping each item inside the parent folder
+                foreach (Shell32.FolderItem2 item in objFolder.Items())
+                {
+                    string filePath = this.parentFolderPath;
+                    ShellFile file = null;
+                    for (int i = 0; i < arrHeaders.Count; i++)
+                    {
+                        var propertyName = arrHeaders[i];
+                        var propertyDetail = objFolder.GetDetailsOf(item, i);
+
+                        if (i == 0)
+                        {
+                            if (objFolder.GetDetailsOf(item,i) == this.originalFileName + this.ext)
+                            {
+                                file = ShellFile.FromFilePath(filePath + "/" + propertyDetail);
+                                file.Properties.System.FileName.Value = this.fileName;
+                                file.Properties.System.Title.Value = this.fileName;
+                                file.Properties.System.Media.Subtitle.Value = "";
+                                file.Properties.System.Author.Value = new string[] { };
+                                file.Properties.System.Media.Year.Value = this.movieData.Year != null ? uint.Parse(this.movieData.Year) : 0;
+                                file.Properties.System.Music.Genre.Value = this.movieData.Genre != null ? new string[] { this.movieData.Genre } : new string[] { };
+                                file.Properties.System.Media.ProviderRating.Value = this.movieData.Rated != null ? this.movieData.Rated : "";
+                                file.Properties.System.Media.DateReleased.Value = this.movieData.Released != null ? this.movieData.Released : "";
+                                file.Properties.System.Music.Artist.Value = new string[] { };
+                                file.Properties.System.Video.Director.Value = this.movieData.Director != null ? new string[] { this.movieData.Director } : new string[] { };
+                                file.Properties.System.Media.Writer.Value = this.movieData.Writer != null ? new string[] { this.movieData.Writer } : new string[] { };
+                                break;
+                            }
+                        } 
+                        //Console.WriteLine("{0}\t{1}: {2}", i, arrHeaders[i], objFolder.GetDetailsOf(item, i));
+                    }                    
+
+                    //Console.WriteLine("\n\n**************************\n\n");
+                }
+
+                foreach (Shell32.FolderItem2 item in objFolder.Items())
+                {
+                    for (int i = 0; i < arrHeaders.Count; i++)
+                    {                        
+                        Console.WriteLine("{0}\t{1}: {2}", i, arrHeaders[i], objFolder.GetDetailsOf(item, i));
+                    }
+
+                    Console.WriteLine("\n\n**************************\n\n");
+                }
             }
             catch (Exception ex)
             {

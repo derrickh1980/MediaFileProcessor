@@ -141,6 +141,8 @@ namespace MediaFileProcessor
                 addFinishedFile(file.fileName);
             }
 
+            files = new List<MediaFile>();
+
             addInfoFile("Move Complete...");
             addInfoFile(Environment.NewLine);
             addInfoFile("-------------------------------------");
@@ -252,5 +254,6 @@ namespace MediaFileProcessor
             infoList.Items.Remove(name);
         }
         #endregion Helper Methods
+        
     }
 }

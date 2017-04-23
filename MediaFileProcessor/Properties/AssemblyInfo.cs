@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MediaFileProcessor")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Media File Processor")]
+[assembly: AssemblyDescription("Automatically rename and move media files.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MediaFileProcessor")]
+[assembly: AssemblyCompany("55TEK")]
+[assembly: AssemblyProduct("Media File Processor")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
