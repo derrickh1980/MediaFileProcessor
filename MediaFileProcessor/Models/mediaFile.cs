@@ -89,7 +89,7 @@ namespace MediaFileProcessor.Models
                     {
                         // this is the first run so do the default processing
                         int yr = 0;
-                        if ((int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060) || (part == "1080p") || (part == "720p") || (part == "WEBRiP"))
+                        if ((int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060) || part == "1080p" || part == "720p" || part == "WEBRiP" || part == "HDTV")
                         {
                             this.delimiter = part;
                             break;
