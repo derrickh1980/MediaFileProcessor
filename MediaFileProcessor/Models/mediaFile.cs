@@ -47,22 +47,28 @@ namespace MediaFileProcessor.Models
 
         public void setPreData()
         {
-            _processor.preProcessor(this);
+            _importProcessor.preProcessor(this);
         }
 
-        public void moveFile()
+        public void moveFile(bool renameFile = true)
         {
             _setMetaData();
-            _processor.postProcessor(this);
+            _importProcessor.postProcessor(this, renameFile);
         }
 
-        private FileProcessor _processor = new FileProcessor();
+        public void cleanMetaData()
+        {
+            _setMetaData();
+        }
+
+        private FileProcessor _importProcessor = new FileProcessor();
+        private CleanupProcessor _cleanupProcessor = new CleanupProcessor();
 
         private void _getMovieData()
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://www.omdbapi.com?" + HttpUtility.ParseQueryString("t=Star Wars Rebels Fighter Flight"));
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://www.omdbapi.com?" + HttpUtility.ParseQueryString("t=" + this.fileName));
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
                 this.movieData = new Movie(content);

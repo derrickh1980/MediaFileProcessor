@@ -85,7 +85,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utilities\comboBoxItem.cs" />
+    <Compile Include="Utilities\cleanupProcessor.cs" />
+    <Compile Include="Models\comboBoxItem.cs" />
     <Compile Include="Utilities\fileProcessor.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>

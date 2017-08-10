@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {            
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(main));
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.importPanel = new System.Windows.Forms.Panel();
             this.title = new System.Windows.Forms.Label();
             this.clear = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -56,38 +56,51 @@
             this.error = new System.Windows.Forms.Label();
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.panel1.SuspendLayout();
+            this.processorTabs = new System.Windows.Forms.TabControl();
+            this.importTabPanel = new System.Windows.Forms.TabPage();
+            this.cleanupTabPanel = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
+            this.selectedFolder = new System.Windows.Forms.TextBox();
+            this.folderSelectButton = new System.Windows.Forms.Button();
+            this.processCleanupButton = new System.Windows.Forms.Button();
+            this.cleanupInfo = new System.Windows.Forms.ListBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.importPanel.SuspendLayout();
+            this.processorTabs.SuspendLayout();
+            this.importTabPanel.SuspendLayout();
+            this.cleanupTabPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // importPanel
             // 
-            this.panel1.Controls.Add(this.title);
-            this.panel1.Controls.Add(this.clear);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.infoList);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.fromDescrition);
-            this.panel1.Controls.Add(this.customerParentName);
-            this.panel1.Controls.Add(this.toDescription);
-            this.panel1.Controls.Add(this.fromPath);
-            this.panel1.Controls.Add(this.fileList);
-            this.panel1.Controls.Add(this.toPath);
-            this.panel1.Controls.Add(this.customFolderName);
-            this.panel1.Controls.Add(this.from);
-            this.panel1.Controls.Add(this.folderName);
-            this.panel1.Controls.Add(this.to);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.process);
-            this.panel1.Controls.Add(this.delimiter);
-            this.panel1.Controls.Add(this.fileName);
-            this.panel1.Controls.Add(this.processName);
-            this.panel1.Controls.Add(this.processedName);
-            this.panel1.Controls.Add(this.add);
-            this.panel1.Controls.Add(this.delimiterOptions);
-            this.panel1.Location = new System.Drawing.Point(4, 2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(834, 649);
-            this.panel1.TabIndex = 0;
+            this.importPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.importPanel.Controls.Add(this.title);
+            this.importPanel.Controls.Add(this.clear);
+            this.importPanel.Controls.Add(this.label1);
+            this.importPanel.Controls.Add(this.infoList);
+            this.importPanel.Controls.Add(this.label2);
+            this.importPanel.Controls.Add(this.fromDescrition);
+            this.importPanel.Controls.Add(this.customerParentName);
+            this.importPanel.Controls.Add(this.toDescription);
+            this.importPanel.Controls.Add(this.fromPath);
+            this.importPanel.Controls.Add(this.fileList);
+            this.importPanel.Controls.Add(this.toPath);
+            this.importPanel.Controls.Add(this.customFolderName);
+            this.importPanel.Controls.Add(this.from);
+            this.importPanel.Controls.Add(this.folderName);
+            this.importPanel.Controls.Add(this.to);
+            this.importPanel.Controls.Add(this.label3);
+            this.importPanel.Controls.Add(this.process);
+            this.importPanel.Controls.Add(this.delimiter);
+            this.importPanel.Controls.Add(this.fileName);
+            this.importPanel.Controls.Add(this.processName);
+            this.importPanel.Controls.Add(this.processedName);
+            this.importPanel.Controls.Add(this.add);
+            this.importPanel.Controls.Add(this.delimiterOptions);
+            this.importPanel.Location = new System.Drawing.Point(0, 0);
+            this.importPanel.Name = "importPanel";
+            this.importPanel.Size = new System.Drawing.Size(834, 649);
+            this.importPanel.TabIndex = 0;
             // 
             // title
             // 
@@ -97,11 +110,11 @@
             this.title.AutoSize = true;
             this.title.Font = new System.Drawing.Font("Arial Unicode MS", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
             this.title.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(91)))), ((int)(((byte)(133)))), ((int)(((byte)(239)))));
-            this.title.Location = new System.Drawing.Point(271, 7);
+            this.title.Location = new System.Drawing.Point(265, 3);
             this.title.Name = "title";
-            this.title.Size = new System.Drawing.Size(292, 26);
+            this.title.Size = new System.Drawing.Size(320, 26);
             this.title.TabIndex = 0;
-            this.title.Text = "Media Center File Processor";
+            this.title.Text = "Media Center Import Processor";
             this.title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // clear
@@ -401,19 +414,151 @@
             this.error.Size = new System.Drawing.Size(0, 17);
             this.error.TabIndex = 6;
             // 
+            // processorTabs
+            // 
+            this.processorTabs.Controls.Add(this.importTabPanel);
+            this.processorTabs.Controls.Add(this.cleanupTabPanel);
+            this.processorTabs.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.processorTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.processorTabs.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.processorTabs.Location = new System.Drawing.Point(0, 0);
+            this.processorTabs.Margin = new System.Windows.Forms.Padding(0);
+            this.processorTabs.Name = "processorTabs";
+            this.processorTabs.Padding = new System.Drawing.Point(25, 3);
+            this.processorTabs.SelectedIndex = 0;
+            this.processorTabs.Size = new System.Drawing.Size(850, 679);
+            this.processorTabs.TabIndex = 1;
+            // 
+            // importTabPanel
+            // 
+            this.importTabPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.importTabPanel.Controls.Add(this.importPanel);
+            this.importTabPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.importTabPanel.Location = new System.Drawing.Point(4, 25);
+            this.importTabPanel.Name = "importTabPanel";
+            this.importTabPanel.Padding = new System.Windows.Forms.Padding(3);
+            this.importTabPanel.Size = new System.Drawing.Size(842, 650);
+            this.importTabPanel.TabIndex = 0;
+            this.importTabPanel.Text = "Import";
+            // 
+            // cleanupTabPanel
+            // 
+            this.cleanupTabPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.cleanupTabPanel.Controls.Add(this.label5);
+            this.cleanupTabPanel.Controls.Add(this.cleanupInfo);
+            this.cleanupTabPanel.Controls.Add(this.processCleanupButton);
+            this.cleanupTabPanel.Controls.Add(this.label4);
+            this.cleanupTabPanel.Controls.Add(this.selectedFolder);
+            this.cleanupTabPanel.Controls.Add(this.folderSelectButton);
+            this.cleanupTabPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.cleanupTabPanel.Location = new System.Drawing.Point(4, 25);
+            this.cleanupTabPanel.Name = "cleanupTabPanel";
+            this.cleanupTabPanel.Padding = new System.Windows.Forms.Padding(3);
+            this.cleanupTabPanel.Size = new System.Drawing.Size(842, 650);
+            this.cleanupTabPanel.TabIndex = 1;
+            this.cleanupTabPanel.Text = "Cleanup";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Arial", 10F);
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
+            this.label4.Location = new System.Drawing.Point(11, 45);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(112, 16);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Selected Folder:";
+            // 
+            // selectedFolder
+            // 
+            this.selectedFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.selectedFolder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.selectedFolder.Font = new System.Drawing.Font("Arial", 10F);
+            this.selectedFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(114)))), ((int)(((byte)(206)))));
+            this.selectedFolder.Location = new System.Drawing.Point(129, 43);
+            this.selectedFolder.Name = "selectedFolder";
+            this.selectedFolder.Size = new System.Drawing.Size(576, 23);
+            this.selectedFolder.TabIndex = 6;
+            // 
+            // folderSelectButton
+            // 
+            this.folderSelectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.folderSelectButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.folderSelectButton.FlatAppearance.BorderSize = 0;
+            this.folderSelectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.folderSelectButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.folderSelectButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
+            this.folderSelectButton.Location = new System.Drawing.Point(711, 40);
+            this.folderSelectButton.Name = "folderSelectButton";
+            this.folderSelectButton.Size = new System.Drawing.Size(121, 27);
+            this.folderSelectButton.TabIndex = 7;
+            this.folderSelectButton.Text = "Select Folder";
+            this.folderSelectButton.UseVisualStyleBackColor = false;
+            this.folderSelectButton.Click += new System.EventHandler(this.folderSelectButton_Click);
+            // 
+            // processCleanupButton
+            // 
+            this.processCleanupButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.processCleanupButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.processCleanupButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.processCleanupButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.processCleanupButton.FlatAppearance.BorderSize = 0;
+            this.processCleanupButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.processCleanupButton.Font = new System.Drawing.Font("Arial", 9F);
+            this.processCleanupButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
+            this.processCleanupButton.Location = new System.Drawing.Point(11, 582);
+            this.processCleanupButton.Name = "processCleanupButton";
+            this.processCleanupButton.Size = new System.Drawing.Size(823, 60);
+            this.processCleanupButton.TabIndex = 9;
+            this.processCleanupButton.Text = "Process";
+            this.processCleanupButton.UseVisualStyleBackColor = false;
+            this.processCleanupButton.Click += new System.EventHandler(this.processCleanupButton_Click);
+            // 
+            // cleanupInfo
+            // 
+            this.cleanupInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.cleanupInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cleanupInfo.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
+            this.cleanupInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(114)))), ((int)(((byte)(206)))));
+            this.cleanupInfo.FormattingEnabled = true;
+            this.cleanupInfo.ItemHeight = 17;
+            this.cleanupInfo.Location = new System.Drawing.Point(11, 81);
+            this.cleanupInfo.Name = "cleanupInfo";
+            this.cleanupInfo.Size = new System.Drawing.Size(823, 478);
+            this.cleanupInfo.TabIndex = 10;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Arial Unicode MS", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
+            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(91)))), ((int)(((byte)(133)))), ((int)(((byte)(239)))));
+            this.label5.Location = new System.Drawing.Point(236, 3);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(379, 26);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Media Center File Cleanup Processor";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(840, 651);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(850, 679);
+            this.Controls.Add(this.processorTabs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "main";
             this.Text = "Media Center File Processor";
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.importPanel.ResumeLayout(false);
+            this.importPanel.PerformLayout();
+            this.processorTabs.ResumeLayout(false);
+            this.importTabPanel.ResumeLayout(false);
+            this.cleanupTabPanel.ResumeLayout(false);
+            this.cleanupTabPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -421,7 +566,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel importPanel;
         private System.Windows.Forms.Label title;
         private System.Windows.Forms.Button to;
         private System.Windows.Forms.Button from;
@@ -448,6 +593,15 @@
         private System.Windows.Forms.Label customerParentName;
         private System.Windows.Forms.TextBox customFolderName;
         private System.Windows.Forms.Label folderName;
+        private System.Windows.Forms.TabControl processorTabs;
+        private System.Windows.Forms.TabPage importTabPanel;
+        private System.Windows.Forms.TabPage cleanupTabPanel;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox selectedFolder;
+        private System.Windows.Forms.Button folderSelectButton;
+        private System.Windows.Forms.Button processCleanupButton;
+        private System.Windows.Forms.ListBox cleanupInfo;
+        private System.Windows.Forms.Label label5;
     }
 }
 

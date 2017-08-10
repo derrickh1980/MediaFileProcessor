@@ -47,23 +47,28 @@ namespace MediaFileProcessor.Utilities
             }
         }
 
-        public void postProcessor(MediaFile file)
+        public void postProcessor(MediaFile file, bool renaming)
         {
             // the file has already been setup for the move
             // this does the file moving and renaming
 
-            // rename the file
-            string modifiedFilePath = file.filePath.Replace(file.originalFileName + file.ext, file.fileName + file.ext);
-            try { 
-            File.Move(file.filePath, modifiedFilePath);
-            } catch (System.IO.FileNotFoundException error)
+            if (renaming)
             {
-                throw (error);
-            }
+                // rename the file
+                string modifiedFilePath = file.filePath.Replace(file.originalFileName + file.ext, file.fileName + file.ext);
+                try
+                {
+                    File.Move(file.filePath, modifiedFilePath);
+                }
+                catch (System.IO.FileNotFoundException error)
+                {
+                    throw (error);
+                }
 
-            // set the file path to reflect the name change
-            file.filePath = modifiedFilePath;
-            file.originalFileName = null;
+                // set the file path to reflect the name change
+                file.filePath = modifiedFilePath;
+                file.originalFileName = null;
+            }
 
             // create the new parent directory
             string newParentPath = file.movePath + "\\" + file.parentFolderName;

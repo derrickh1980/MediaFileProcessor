@@ -18,6 +18,7 @@ namespace MediaFileProcessor
         public List<MediaFile> files = new List<MediaFile>();
         public MediaFile currentFile = null;
         public MediaFile oldFile = null;
+        private CleanupProcessor _cleanupProcessor = new CleanupProcessor();
 
         public main()
         {
@@ -254,6 +255,30 @@ namespace MediaFileProcessor
             infoList.Items.Remove(name);
         }
         #endregion Helper Methods
-        
+
+        private void folderSelectButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFolderDialog.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string folderPath = openFolderDialog.SelectedPath;
+                try
+                {
+                    selectedFolder.Text = folderPath;
+                }
+                catch (IOException ex)
+                {
+                    error.Text = ex.Message;
+                }
+            }
+        }
+
+        private void processCleanupButton_Click(object sender, EventArgs e)
+        {
+            // process the selected folder
+            _cleanupProcessor.info = "";
+            _cleanupProcessor.runCleanup(selectedFolder.Text);
+            cleanupInfo.Text = _cleanupProcessor.info;
+        }
     }
 }
