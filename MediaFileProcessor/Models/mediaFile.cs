@@ -6,11 +6,19 @@ using System.Net;
 using System.Web;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace MediaFileProcessor.Models
 {
     public class MediaFile
     {
+        private string apiKey = "0d665b6e7609d157c003ca8999f6c9b2";
+        private Uri baseAddress = new Uri("https://api.themoviedb.org/3/");
+        private int loadCounter = 4;
+
         public MediaFile(string path, string movePath)
         {
             this.filePath = path;
@@ -19,9 +27,11 @@ namespace MediaFileProcessor.Models
 
         public string delimiter { get; set; }
         public string[] delimiterOptions { get; set; }
+        public string[] directors { get; set; }
         public string ext { get; set; }
         public string fileName { get; set; }
         public string filePath { get; set; }
+        public string[] genres { get; set; }
         public Movie movieData { get; set; }
         public string movePath { get; set; }
         public string originalFileName { get; set; }
@@ -29,6 +39,9 @@ namespace MediaFileProcessor.Models
         public string parentFolderName { get; set; }
         public string parentFolderNameCustom { get; set; }
         public string parentFolderPath { get; set; }
+        public string[] producers { get; set; }
+        public string rating { get; set; }
+        public string[] writers { get; set; }
         public string year { get; set; }
 
         public string processTempName()
@@ -50,10 +63,10 @@ namespace MediaFileProcessor.Models
             _importProcessor.preProcessor(this);
         }
 
-        public void moveFile(bool renameFile = true)
+        public void moveFile(bool renameFile = true, bool doDelete = true)
         {
             _setMetaData();
-            _importProcessor.postProcessor(this, renameFile);
+            _importProcessor.postProcessor(this, renameFile, doDelete);
         }
 
         public void cleanMetaData()
@@ -64,17 +77,52 @@ namespace MediaFileProcessor.Models
         private FileProcessor _importProcessor = new FileProcessor();
         private CleanupProcessor _cleanupProcessor = new CleanupProcessor();
 
-        private void _getMovieData()
+        private void _getMovieData(string name, MediaFile me)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://www.omdbapi.com?" + HttpUtility.ParseQueryString("t=" + this.fileName));
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
-                this.movieData = new Movie(content);
+                // Query by the movie name to get best matches.
+                NameQueryResponse nameQueryResponse = queryName(name);
+
+                if (nameQueryResponse != null)
+                {
+                    // Process down to the best match.
+                    NameQueryMovie[] movieResponses = new NameQueryMovie[nameQueryResponse.total_results];
+                    var index = 0;
+                    var nodes = JArray.Parse(nameQueryResponse.results.ToString());
+                    foreach (JToken node in nodes)
+                    {
+                        if (node != null)
+                        {
+                            movieResponses[index] = new NameQueryMovie(node.ToString());
+                        }
+                        ++index;
+                    }
+
+                    this.movieData = queryId(movieResponses.Where(x => x != null).ToArray().OrderByDescending(x => x.vote_count).First().id);
+
+                    if (this.movieData != null)
+                    {
+                        getGenreNames(this.movieData.genres);
+
+                        queryRating();
+
+                        queryCrew();
+
+                    }
+                    else
+                    {
+                        this.loadCounter = 0;
+                    }
+                }
+                else
+                {
+                    this.loadCounter = 0;
+                }
             }
             catch (Exception ex)
             {
+                this.loadCounter = 0;
                 // do nothing here...
             }
         }
@@ -145,12 +193,196 @@ namespace MediaFileProcessor.Models
 
         }
 
+        private void getGenreNames(JArray jGenres)
+        {
+            var tokens = JArray.Parse(jGenres.ToString());
+            this.genres = new String[tokens.ToList().Count];
+            var index = 0;
+            foreach (JToken token in tokens)
+            {
+                Genre genre = new Genre(token.ToString());
+                this.genres[index] = genre.name;
+                ++index;
+            }
+
+            this.genres = genres;
+        }
+
+        private void getProducers(JArray jProducers)
+        {
+            var tokens = JArray.Parse(jProducers.ToString());
+            this.producers = new String[tokens.ToList().Count];
+            var index = 0;
+            foreach (JToken token in tokens)
+            {
+                Producer producer = new Producer(token.ToString());
+                this.producers[index] = producer.name;
+                ++index;
+            }
+        }
+
+        private void queryCrew()
+        {
+            try
+            {
+                CrewQuery initialCrewResponse = null;
+                using (var httpClient = new HttpClient { BaseAddress = this.baseAddress })
+                {
+                    var crewResponse = httpClient.GetAsync(@"movie/" + this.movieData.id + @"/credits?" + HttpUtility.ParseQueryString(@"api_key=" + this.apiKey));
+                    if (crewResponse.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        initialCrewResponse = new CrewQuery(crewResponse.Result.Content.ReadAsStringAsync().Result);
+                    }
+                    else
+                    {
+                        --this.loadCounter;
+                        return;
+                    }
+                }
+
+                List<string> directorsList = new List<string>();
+                List<string> writersList = new List<string>();
+
+                CrewMember[] crew = new CrewMember[initialCrewResponse.crew.ToList().Count];
+                var index = 0;
+                foreach (var item in initialCrewResponse.crew)
+                {
+                    var member = new CrewMember(item.ToString());
+                    if (member.department == "Directing")
+                    {
+                        directorsList.Add(member.name);
+                    }
+                    else if (member.department == "Writing")
+                    {
+                        writersList.Add(member.name);
+                    }
+                }
+
+                if (directorsList.Count > 0)
+                {
+                    this.directors = directorsList.ToArray();
+                }
+
+                if (writersList.Count > 0)
+                {
+                    this.writers = writersList.ToArray();
+                }
+
+                --this.loadCounter;
+            }
+            catch (Exception ex)
+            {
+                --this.loadCounter;
+            }
+        }
+
+        private Movie queryId(int id)
+        {
+            try
+            {
+                Movie queryResponse = null;
+                using (var httpClient = new HttpClient { BaseAddress = baseAddress })
+                {
+                    var movieResponse = httpClient.GetAsync(@"movie/" + id + @"?" + HttpUtility.ParseQueryString(@"api_key=" + this.apiKey));
+                    if (movieResponse.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        queryResponse = new Movie(movieResponse.Result.Content.ReadAsStringAsync().Result);
+                        --this.loadCounter;
+                    }
+                    else
+                    {
+                        --this.loadCounter;
+                        return null;
+                    }
+                }
+
+                return queryResponse;
+            }
+            catch (Exception ex)
+            {
+                --this.loadCounter;
+                return null;
+            }
+        }
+
+        private NameQueryResponse queryName(string name)
+        {
+            try
+            {
+                NameQueryResponse initialNameResponse = null;
+                using (var httpClient = new HttpClient { BaseAddress = this.baseAddress })
+                {
+                    var nameResponse = httpClient.GetAsync(@"search/movie?" + HttpUtility.ParseQueryString(@"api_key=" + this.apiKey + @"&query=" + name));
+                    if (nameResponse.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        initialNameResponse = new NameQueryResponse(nameResponse.Result.Content.ReadAsStringAsync().Result);
+                        --this.loadCounter;
+                    }
+                    else
+                    {
+                        --this.loadCounter;
+                        return null;
+                    }
+                }
+
+                return initialNameResponse;
+            }
+            catch (Exception ex)
+            {
+                --this.loadCounter;
+                return null;
+            }
+        }
+
+        private void queryRating()
+        {
+            try
+            {
+                ReleaseDatesQuery initialRatingResponse = null;
+                using (var httpClient = new HttpClient { BaseAddress = this.baseAddress })
+                {
+                    var ratingResponse = httpClient.GetAsync(@"movie/" + this.movieData.id + @"/release_dates?" + HttpUtility.ParseQueryString(@"api_key=" + this.apiKey));
+                    if (ratingResponse.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        initialRatingResponse = new ReleaseDatesQuery(ratingResponse.Result.Content.ReadAsStringAsync().Result);
+                    }
+                    else
+                    {
+                        --this.loadCounter;
+                        return;
+                    }
+                }
+
+                ReleaseDateResult[] resultArray = new ReleaseDateResult[initialRatingResponse.results.ToList().Count];
+                int index = 0;
+                foreach (var result in initialRatingResponse.results)
+                {
+                    resultArray[index] = new ReleaseDateResult(result.ToString());
+                    ++index;
+                }
+
+                ReleaseDateResult datesResult = resultArray.First(x => x.iso_3166_1 == "US");
+
+                this.rating = new ReleaseDate(JArray.Parse(datesResult.release_dates.ToString())[0].ToString()).certification;
+                --this.loadCounter;
+            }
+            catch (Exception ex)
+            {
+                --this.loadCounter;
+            }
+        }
+
         private void _setMetaData()
         {
             try
             {
 
-                _getMovieData();
+                _getMovieData(this.fileName, this);
+
+                while (this.loadCounter > 0)
+                {
+                    // we are waiting for the calls to finish here.
+                }
 
                 List<string> arrHeaders = new List<string>();
 
@@ -188,33 +420,32 @@ namespace MediaFileProcessor.Models
 
                         if (i == 0)
                         {
-                            if (objFolder.GetDetailsOf(item,i) == this.originalFileName + this.ext)
+                            if (objFolder.GetDetailsOf(item, i) == this.originalFileName + this.ext)
                             {
                                 file = ShellFile.FromFilePath(filePath + "/" + propertyDetail);
                                 file.Properties.System.FileName.Value = this.fileName;
                                 file.Properties.System.Title.Value = this.fileName;
-                                file.Properties.System.Media.Subtitle.Value = "";
-                                file.Properties.System.Author.Value = new string[] { };
-                                file.Properties.System.Media.Year.Value = this.movieData.Year != null ? uint.Parse(this.movieData.Year) : 0;
-                                file.Properties.System.Music.Genre.Value = this.movieData.Genre != null ? new string[] { this.movieData.Genre } : new string[] { };
-                                file.Properties.System.Media.ProviderRating.Value = this.movieData.Rated != null ? this.movieData.Rated : "";
-                                file.Properties.System.Media.DateReleased.Value = this.movieData.Released != null ? this.movieData.Released : "";
+                                file.Properties.System.Media.Subtitle.Value = null;
+                                file.Properties.System.Comment.Value = null;
+                                file.Properties.System.Author.Value = null;
+                                file.Properties.System.Media.Year.Value = this.movieData != null && this.movieData.release_date != null ? (uint?)int.Parse(this.movieData.release_date.Substring(0, 4)) : null;
+                                file.Properties.System.Music.Genre.Value = this.genres != null && this.genres.Length > 0 ? this.genres : null;
+                                file.Properties.System.ParentalRating.Value = this.rating != null ? this.rating : null;
+                                file.Properties.System.Media.ProviderRating.Value = null;
+                                file.Properties.System.Media.DateReleased.Value = this.movieData.release_date != null ? this.movieData.release_date : null;
                                 file.Properties.System.Music.Artist.Value = new string[] { };
-                                file.Properties.System.Video.Director.Value = this.movieData.Director != null ? new string[] { this.movieData.Director } : new string[] { };
-                                file.Properties.System.Media.Writer.Value = this.movieData.Writer != null ? new string[] { this.movieData.Writer } : new string[] { };
+                                file.Properties.System.Video.Director.Value = this.directors != null && this.directors.Length > 0 ? this.directors : null;
+                                file.Properties.System.Media.Writer.Value = this.writers != null && this.writers.Length > 0 ? this.writers : null;
                                 break;
                             }
-                        } 
-                        //Console.WriteLine("{0}\t{1}: {2}", i, arrHeaders[i], objFolder.GetDetailsOf(item, i));
-                    }                    
-
-                    //Console.WriteLine("\n\n**************************\n\n");
+                        }
+                    }
                 }
 
                 foreach (Shell32.FolderItem2 item in objFolder.Items())
                 {
                     for (int i = 0; i < arrHeaders.Count; i++)
-                    {                        
+                    {
                         Console.WriteLine("{0}\t{1}: {2}", i, arrHeaders[i], objFolder.GetDetailsOf(item, i));
                     }
 

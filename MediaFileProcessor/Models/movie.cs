@@ -1,56 +1,63 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MediaFileProcessor.Models
 {
     public class Movie
     {
-        public string Title { get; set; }
-        public string Year { get; set; }
-        public string Rated { get; set; }
-        public string Released { get; set; }
-        public string Runtime { get; set; }
-        public string Genre { get; set; }
-        public string Director { get; set; }
-        public string Writer { get; set; }
-        public string Actors { get; set; }
-        public string Plot { get; set; }
-        public string Language { get; set; }
-        public string Country { get; set; }
-        public string Awards { get; set; }
-        public string Poster { get; set; }
-        public string Metascore { get; set; }
-        public string imdbRating { get; set; }
-        public string tiimdbVotestle { get; set; }
-        public string imdbID { get; set; }
-        public string Type { get; set; }
-
+        public bool adult { get; set; }
+        public string backdrop_path { get; set; }
+        public object belongs_to_collection { get; set; }
+        public int budget { get; set; }
+        public JArray genres { get; set; }
+        public string homepage { get; set; }
+        public int id { get; set; }
+        public string imdb_id { get; set; }
+        public string original_language { get; set; }
+        public string original_title { get; set; }
+        public string overview { get; set; }
+        public float popularity { get; set; }
+        public string poster_path { get; set; }
+        public JArray production_companies { get; set; }
+        public JArray production_countries { get; set; }
+        public string release_date { get; set; }
+        public int revenue { get; set; }
+        public int runtime { get; set; }
+        public JArray spoken_languages { get; set; }
+        public string status { get; set; }
+        public string tagline { get; set; }
+        public string title { get; set; }
+        public bool video { get; set; }
+        public float vote_average { get; set; }
+        public int vote_count { get; set; }
         public Movie(string json)
         {
             JObject jObject = JObject.Parse(json);
-            Title = (string) jObject["Title"];
-            Year = (string)jObject["Year"];
-            Rated = (string)jObject["Rated"];
-            Released = (string)jObject["Released"];
-            Runtime = (string)jObject["Runtime"];
-            Genre = (string)jObject["Genre"];
-            Director = (string)jObject["Director"];
-            Writer = (string)jObject["Writer"];
-            Actors = (string)jObject["Actors"];
-            Plot = (string)jObject["Plot"];
-            Language = (string)jObject["Language"];
-            Country = (string)jObject["Country"];
-            Awards = (string)jObject["Awards"];
-            Poster = (string)jObject["Poster"];
-            Metascore = (string)jObject["Metascore"];
-            imdbRating = (string)jObject["imdbRating"];
-            tiimdbVotestle = (string)jObject["tiimdbVotestle"];
-            imdbID = (string)jObject["imdbID"];
-            Type = (string)jObject["Type"];
+            adult = (bool)jObject["adult"];
+            backdrop_path = (string)jObject["backdrop_path"];
+            belongs_to_collection = (object)jObject["belongs_to_collection"];
+            budget = (int)jObject["budget"];
+            genres = (JArray)jObject["genres"];
+            homepage = (string)jObject["homepage"];
+            id = (int)jObject["id"];
+            imdb_id = (string)jObject["imdb_id"];
+            original_language = (string)jObject["original_language"];
+            original_title = (string)jObject["original_title"];
+            overview = (string)jObject["overview"];
+            popularity = (int)jObject["popularity"];
+            poster_path = (string)jObject["poster_path"];
+            production_companies = (JArray)jObject["production_companies"];
+            production_countries = (JArray)jObject["production_countries"];
+            release_date = (string)jObject["release_date"];
+            revenue = (int)jObject["revenue"];
+            runtime = (int)jObject["runtime"];
+            spoken_languages = (JArray)jObject["spoken_languages"];
+            status = (string)jObject["status"];
+            tagline = (string)jObject["tagline"];
+            title = (string)jObject["title"];
+            video = (bool)jObject["video"];
+            vote_average = (int)jObject["vote_average"];
+            vote_count = (int)jObject["vote_count"];
+
         }
     }
 }

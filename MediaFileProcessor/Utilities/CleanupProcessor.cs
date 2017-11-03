@@ -14,7 +14,7 @@ namespace MediaFileProcessor.Utilities
         private IEnumerable<string> folders;
         private IEnumerable<string> files;
 
-        public string info = "";
+        public List<string> info = new List<string>();
 
         public void runCleanup(string selectedFolderPath)
         {
@@ -23,9 +23,9 @@ namespace MediaFileProcessor.Utilities
             getFiles();
 
             processFolders();
-            processFiles();            
+            processFiles();
         }
-        
+
         private void getFolders()
         {
             folders = Directory.EnumerateDirectories(parentPath);
@@ -34,8 +34,8 @@ namespace MediaFileProcessor.Utilities
         private void getFiles()
         {
             files = Directory.EnumerateFiles(parentPath);
-        } 
-      
+        }
+
         private void processFolders()
         {
             if (folders != null && folders.ToList().Count > 0)
@@ -47,13 +47,17 @@ namespace MediaFileProcessor.Utilities
                     {
                         MediaFile mediaFile = new MediaFile(file, "");
                         mediaFile.fileName = mediaFile.processTempName();
-                        mediaFile.cleanMetaData();
-                        info += "Cleaned File: " + mediaFile.fileName + "\r\n";
+                        mediaFile.setPreData();
+                        if (mediaFile.ext == ".mp4" || mediaFile.ext == ".avi")
+                        {
+                            mediaFile.cleanMetaData();
+                            this.info.Add("Cleaned File: " + mediaFile.fileName);
+                        }
                     }
                 }
             }
         }
-        
+
         private void processFiles()
         {
             if (files != null && files.ToList().Count > 0)
@@ -64,11 +68,11 @@ namespace MediaFileProcessor.Utilities
                     mediaFile.fileName = mediaFile.processTempName();
                     mediaFile.parentFolderNameCustom = mediaFile.fileName;
                     mediaFile.setPreData();
-                    mediaFile.movePath = mediaFile.parentFolderPath + "\\" + mediaFile.parentFolderNameCustom;
-                    mediaFile.moveFile(false);
-                    info += "Cleaned and Moved File: " + mediaFile.fileName + "\r\n";
+                    mediaFile.movePath = mediaFile.parentFolderPath;
+                    mediaFile.moveFile(false, false);
+                    this.info.Add("Cleaned and Moved File: " + mediaFile.fileName);
                 }
             }
-        }    
+        }
     }
 }

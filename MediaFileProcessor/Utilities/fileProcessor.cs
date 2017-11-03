@@ -47,7 +47,7 @@ namespace MediaFileProcessor.Utilities
             }
         }
 
-        public void postProcessor(MediaFile file, bool renaming)
+        public void postProcessor(MediaFile file, bool renaming, bool doDelete)
         {
             // the file has already been setup for the move
             // this does the file moving and renaming
@@ -72,6 +72,7 @@ namespace MediaFileProcessor.Utilities
 
             // create the new parent directory
             string newParentPath = file.movePath + "\\" + file.parentFolderName;
+
             if (!Directory.Exists(newParentPath))
             {
                 Directory.CreateDirectory(newParentPath);
@@ -85,9 +86,13 @@ namespace MediaFileProcessor.Utilities
             //File.Delete(file.filePath);
 
             // delete the old folder if no more files reside there
-            if (Directory.GetFiles(file.parentFolderPath, "*", SearchOption.TopDirectoryOnly).Length == 0)
+            if (doDelete)
             {
-                Directory.Delete(file.parentFolderPath);
+                if (Directory.GetFiles(file.parentFolderPath, "*", SearchOption.TopDirectoryOnly).Length == 0 &&
+                    Directory.GetDirectories(file.parentFolderName, "*", SearchOption.TopDirectoryOnly).Length == 0)
+                {
+                    Directory.Delete(file.parentFolderPath);
+                }
             }
 
             // set the file's parameters to reflect the move

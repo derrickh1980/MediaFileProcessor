@@ -276,9 +276,13 @@ namespace MediaFileProcessor
         private void processCleanupButton_Click(object sender, EventArgs e)
         {
             // process the selected folder
-            _cleanupProcessor.info = "";
+            _cleanupProcessor.info = new List<string>();
             _cleanupProcessor.runCleanup(selectedFolder.Text);
-            cleanupInfo.Text = _cleanupProcessor.info;
+
+            foreach (var line in _cleanupProcessor.info)
+            {
+                cleanupInfo.Items.Add(line);
+            }            
         }
     }
 }
