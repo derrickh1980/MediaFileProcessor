@@ -284,5 +284,43 @@ namespace MediaFileProcessor
                 cleanupInfo.Items.Add(line);
             }            
         }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void smcProcessButton_Click(object sender, EventArgs e)
+        {
+            // get the files in the selected folder
+            _cleanupProcessor.runSMC(smcPath.Text, suffixEntry.Text);
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void smcFolderSelect_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFolderDialog.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string folderPath = openFolderDialog.SelectedPath;
+                try
+                {
+                    smcPath.Text = folderPath;
+                }
+                catch (IOException ex)
+                {
+                    error.Text = ex.Message;
+                }
+            }
+        }
     }
 }

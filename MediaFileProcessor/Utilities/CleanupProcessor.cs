@@ -26,6 +26,13 @@ namespace MediaFileProcessor.Utilities
             processFiles();
         }
 
+        public void runSMC(string selectedFolderPath, string suffix)
+        {
+            parentPath = selectedFolderPath;
+            getFiles();
+            renameFiles(suffix);
+        }
+
         private void getFolders()
         {
             folders = Directory.EnumerateDirectories(parentPath);
@@ -71,6 +78,17 @@ namespace MediaFileProcessor.Utilities
                     mediaFile.movePath = mediaFile.parentFolderPath;
                     mediaFile.moveFile(false, false);
                     this.info.Add("Cleaned and Moved File: " + mediaFile.fileName);
+                }
+            }
+        }
+
+        private void renameFiles(string ext)
+        {
+            if (files != null && files.ToList().Count > 0)
+            {
+                foreach(string file in files)
+                {
+                    System.IO.File.Move(file, file + ext);
                 }
             }
         }

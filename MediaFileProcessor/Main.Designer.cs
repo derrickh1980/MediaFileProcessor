@@ -59,16 +59,26 @@
             this.processorTabs = new System.Windows.Forms.TabControl();
             this.importTabPanel = new System.Windows.Forms.TabPage();
             this.cleanupTabPanel = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cleanupInfo = new System.Windows.Forms.ListBox();
+            this.processCleanupButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.selectedFolder = new System.Windows.Forms.TextBox();
             this.folderSelectButton = new System.Windows.Forms.Button();
-            this.processCleanupButton = new System.Windows.Forms.Button();
-            this.cleanupInfo = new System.Windows.Forms.ListBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.smcList = new System.Windows.Forms.ListBox();
+            this.smcProcessButton = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.smcPath = new System.Windows.Forms.TextBox();
+            this.smcFolderSelect = new System.Windows.Forms.Button();
+            this.suffixLabel = new System.Windows.Forms.Label();
+            this.suffixEntry = new System.Windows.Forms.TextBox();
             this.importPanel.SuspendLayout();
             this.processorTabs.SuspendLayout();
             this.importTabPanel.SuspendLayout();
             this.cleanupTabPanel.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // importPanel
@@ -418,6 +428,7 @@
             // 
             this.processorTabs.Controls.Add(this.importTabPanel);
             this.processorTabs.Controls.Add(this.cleanupTabPanel);
+            this.processorTabs.Controls.Add(this.tabPage1);
             this.processorTabs.Cursor = System.Windows.Forms.Cursors.Hand;
             this.processorTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.processorTabs.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -458,6 +469,52 @@
             this.cleanupTabPanel.TabIndex = 1;
             this.cleanupTabPanel.Text = "Cleanup";
             // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Arial Unicode MS", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
+            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(91)))), ((int)(((byte)(133)))), ((int)(((byte)(239)))));
+            this.label5.Location = new System.Drawing.Point(236, 3);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(379, 26);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Media Center File Cleanup Processor";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // cleanupInfo
+            // 
+            this.cleanupInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.cleanupInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cleanupInfo.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
+            this.cleanupInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(114)))), ((int)(((byte)(206)))));
+            this.cleanupInfo.FormattingEnabled = true;
+            this.cleanupInfo.ItemHeight = 17;
+            this.cleanupInfo.Location = new System.Drawing.Point(11, 81);
+            this.cleanupInfo.Name = "cleanupInfo";
+            this.cleanupInfo.Size = new System.Drawing.Size(823, 478);
+            this.cleanupInfo.TabIndex = 10;
+            // 
+            // processCleanupButton
+            // 
+            this.processCleanupButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.processCleanupButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.processCleanupButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.processCleanupButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.processCleanupButton.FlatAppearance.BorderSize = 0;
+            this.processCleanupButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.processCleanupButton.Font = new System.Drawing.Font("Arial", 9F);
+            this.processCleanupButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
+            this.processCleanupButton.Location = new System.Drawing.Point(11, 582);
+            this.processCleanupButton.Name = "processCleanupButton";
+            this.processCleanupButton.Size = new System.Drawing.Size(823, 60);
+            this.processCleanupButton.TabIndex = 9;
+            this.processCleanupButton.Text = "Process";
+            this.processCleanupButton.UseVisualStyleBackColor = false;
+            this.processCleanupButton.Click += new System.EventHandler(this.processCleanupButton_Click);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -496,51 +553,132 @@
             this.folderSelectButton.UseVisualStyleBackColor = false;
             this.folderSelectButton.Click += new System.EventHandler(this.folderSelectButton_Click);
             // 
-            // processCleanupButton
+            // tabPage1
             // 
-            this.processCleanupButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabPage1.BackColor = System.Drawing.Color.Black;
+            this.tabPage1.Controls.Add(this.suffixLabel);
+            this.tabPage1.Controls.Add(this.suffixEntry);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.smcList);
+            this.tabPage1.Controls.Add(this.smcProcessButton);
+            this.tabPage1.Controls.Add(this.label7);
+            this.tabPage1.Controls.Add(this.smcPath);
+            this.tabPage1.Controls.Add(this.smcFolderSelect);
+            this.tabPage1.ForeColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(842, 650);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Add Suffix";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.processCleanupButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.processCleanupButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.processCleanupButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.processCleanupButton.FlatAppearance.BorderSize = 0;
-            this.processCleanupButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.processCleanupButton.Font = new System.Drawing.Font("Arial", 9F);
-            this.processCleanupButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
-            this.processCleanupButton.Location = new System.Drawing.Point(11, 582);
-            this.processCleanupButton.Name = "processCleanupButton";
-            this.processCleanupButton.Size = new System.Drawing.Size(823, 60);
-            this.processCleanupButton.TabIndex = 9;
-            this.processCleanupButton.Text = "Process";
-            this.processCleanupButton.UseVisualStyleBackColor = false;
-            this.processCleanupButton.Click += new System.EventHandler(this.processCleanupButton_Click);
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Arial Unicode MS", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
+            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(91)))), ((int)(((byte)(133)))), ((int)(((byte)(239)))));
+            this.label6.Location = new System.Drawing.Point(235, 6);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(294, 26);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Media Center File Add Suffix";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // cleanupInfo
+            // smcList
             // 
-            this.cleanupInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
-            this.cleanupInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cleanupInfo.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
-            this.cleanupInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(114)))), ((int)(((byte)(206)))));
-            this.cleanupInfo.FormattingEnabled = true;
-            this.cleanupInfo.ItemHeight = 17;
-            this.cleanupInfo.Location = new System.Drawing.Point(11, 81);
-            this.cleanupInfo.Name = "cleanupInfo";
-            this.cleanupInfo.Size = new System.Drawing.Size(823, 478);
-            this.cleanupInfo.TabIndex = 10;
+            this.smcList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.smcList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.smcList.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
+            this.smcList.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(114)))), ((int)(((byte)(206)))));
+            this.smcList.FormattingEnabled = true;
+            this.smcList.ItemHeight = 17;
+            this.smcList.Location = new System.Drawing.Point(10, 135);
+            this.smcList.Name = "smcList";
+            this.smcList.Size = new System.Drawing.Size(823, 427);
+            this.smcList.TabIndex = 16;
+            this.smcList.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
-            // label5
+            // smcProcessButton
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.smcProcessButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Arial Unicode MS", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
-            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(91)))), ((int)(((byte)(133)))), ((int)(((byte)(239)))));
-            this.label5.Location = new System.Drawing.Point(236, 3);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(379, 26);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Media Center File Cleanup Processor";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.smcProcessButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.smcProcessButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.smcProcessButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.smcProcessButton.FlatAppearance.BorderSize = 0;
+            this.smcProcessButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.smcProcessButton.Font = new System.Drawing.Font("Arial", 9F);
+            this.smcProcessButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
+            this.smcProcessButton.Location = new System.Drawing.Point(10, 585);
+            this.smcProcessButton.Name = "smcProcessButton";
+            this.smcProcessButton.Size = new System.Drawing.Size(823, 60);
+            this.smcProcessButton.TabIndex = 15;
+            this.smcProcessButton.Text = "Process";
+            this.smcProcessButton.UseVisualStyleBackColor = false;
+            this.smcProcessButton.Click += new System.EventHandler(this.smcProcessButton_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Arial", 10F);
+            this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
+            this.label7.Location = new System.Drawing.Point(10, 48);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(112, 16);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "Selected Folder:";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
+            // 
+            // smcPath
+            // 
+            this.smcPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.smcPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.smcPath.Font = new System.Drawing.Font("Arial", 10F);
+            this.smcPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(114)))), ((int)(((byte)(206)))));
+            this.smcPath.Location = new System.Drawing.Point(128, 46);
+            this.smcPath.Name = "smcPath";
+            this.smcPath.Size = new System.Drawing.Size(576, 23);
+            this.smcPath.TabIndex = 12;
+            this.smcPath.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // smcFolderSelect
+            // 
+            this.smcFolderSelect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.smcFolderSelect.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.smcFolderSelect.FlatAppearance.BorderSize = 0;
+            this.smcFolderSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.smcFolderSelect.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.smcFolderSelect.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
+            this.smcFolderSelect.Location = new System.Drawing.Point(710, 43);
+            this.smcFolderSelect.Name = "smcFolderSelect";
+            this.smcFolderSelect.Size = new System.Drawing.Size(121, 27);
+            this.smcFolderSelect.TabIndex = 13;
+            this.smcFolderSelect.Text = "Select Folder";
+            this.smcFolderSelect.UseVisualStyleBackColor = false;
+            this.smcFolderSelect.Click += new System.EventHandler(this.smcFolderSelect_Click);
+            // 
+            // suffixLabel
+            // 
+            this.suffixLabel.AutoSize = true;
+            this.suffixLabel.Font = new System.Drawing.Font("Arial", 10F);
+            this.suffixLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(225)))), ((int)(((byte)(226)))));
+            this.suffixLabel.Location = new System.Drawing.Point(10, 91);
+            this.suffixLabel.Name = "suffixLabel";
+            this.suffixLabel.Size = new System.Drawing.Size(46, 16);
+            this.suffixLabel.TabIndex = 19;
+            this.suffixLabel.Text = "Suffix:";
+            // 
+            // suffixEntry
+            // 
+            this.suffixEntry.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(14)))), ((int)(((byte)(16)))), ((int)(((byte)(17)))));
+            this.suffixEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.suffixEntry.Font = new System.Drawing.Font("Arial", 10F);
+            this.suffixEntry.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(114)))), ((int)(((byte)(206)))));
+            this.suffixEntry.Location = new System.Drawing.Point(128, 89);
+            this.suffixEntry.Name = "suffixEntry";
+            this.suffixEntry.Size = new System.Drawing.Size(576, 23);
+            this.suffixEntry.TabIndex = 18;
             // 
             // main
             // 
@@ -559,6 +697,8 @@
             this.importTabPanel.ResumeLayout(false);
             this.cleanupTabPanel.ResumeLayout(false);
             this.cleanupTabPanel.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -602,6 +742,15 @@
         private System.Windows.Forms.Button processCleanupButton;
         private System.Windows.Forms.ListBox cleanupInfo;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ListBox smcList;
+        private System.Windows.Forms.Button smcProcessButton;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox smcPath;
+        private System.Windows.Forms.Button smcFolderSelect;
+        private System.Windows.Forms.Label suffixLabel;
+        private System.Windows.Forms.TextBox suffixEntry;
     }
 }
 
