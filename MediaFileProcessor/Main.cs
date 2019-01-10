@@ -73,13 +73,13 @@ namespace MediaFileProcessor
             if (delimiterOptions.SelectedIndex == 0)
             {
                 processedName.Enabled = true;
-                processedName.Text = "";
+                setNames("");
             }
             else if (delimiterOptions.SelectedIndex == currentFile.delimiterOptions.Length + 1)
             {
                 currentFile.delimiter = "This is some random text that will never happen";
                 processedName.Enabled = false;
-                processedName.Text = currentFile.processTempName();
+                setNames(currentFile.processTempName());
             }
             else
             {
@@ -87,8 +87,38 @@ namespace MediaFileProcessor
                 oldFile = new MediaFile(currentFile.filePath, currentFile.movePath);
 
                 currentFile.delimiter = delimiterOptions.Text;
-                processedName.Text = currentFile.processTempName();
+                setNames(currentFile.processTempName());
             }
+        }
+
+        private void setNames(string text)
+        {
+            processedName.Text = text;
+
+            var folderName = text;
+
+            if (text.Contains(" - "))
+            {
+                var split = text.Split(new string[] { " - " }, StringSplitOptions.None);
+                if (split.Length == 2)
+                {
+                    var seasonSplit = split[1].ToLower().Split('e');
+                    if (seasonSplit.Length == 2 && seasonSplit[0].Length == 3)
+                    {
+
+                        var season = seasonSplit[0];
+                        
+                        int sNumber;
+                        
+                        if (int.TryParse(season.Substring(1), out sNumber))
+                        {
+                            folderName = "Season " + season.Substring(1);
+                        }
+                    }
+                }
+            }
+
+            customFolderName.Text = folderName;
         }
 
         private void from_Click(object sender, EventArgs e)
@@ -172,7 +202,7 @@ namespace MediaFileProcessor
                     {
                         currentFile.delimiter = null;
                     }
-                    processedName.Text = currentFile.processTempName();
+                    setNames(currentFile.processTempName());
                     delimiterOptions.Text = currentFile.delimiter;
 
                     files.RemoveAll(file => file.filePath == oldFile.filePath);
@@ -180,7 +210,7 @@ namespace MediaFileProcessor
                 else
                 {
                     currentFile = new MediaFile(fromPath.Text, toPath.Text);
-                    processedName.Text = currentFile.processTempName();
+                    setNames(currentFile.processTempName());
 
                     // start at 1 because 0 is added by default
                     int count = 1;

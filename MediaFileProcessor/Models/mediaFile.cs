@@ -136,13 +136,13 @@ namespace MediaFileProcessor.Models
                 // now to strip down the name
                 var remasteredName = "";
                 int count = 1;
+                int yr = 0;
                 foreach (string part in this.delimiterOptions)
                 {
                     count++;
                     if (this.delimiter == null)
                     {
                         // this is the first run so do the default processing
-                        int yr = 0;
                         if ((int.TryParse(part, out yr) && yr >= 1930 && yr <= 2060) || part == "1080p" || part == "720p" || part == "WEBRiP" || part == "HDTV")
                         {
                             this.delimiter = part;
@@ -150,7 +150,15 @@ namespace MediaFileProcessor.Models
                         }
                         else
                         {
-                            remasteredName += part + " ";
+                            var seriesId = _seriesId(part);
+                            if (seriesId.Contains("- "))
+                            {
+                                remasteredName += seriesId + " ";
+                            }
+                            else
+                            {
+                                remasteredName += _uppercaseFirst(part) + " ";
+                            }                            
                         }
                     }
                     else
@@ -161,7 +169,15 @@ namespace MediaFileProcessor.Models
                         }
                         else
                         {
-                            remasteredName += part + " ";
+                            var seriesId = _seriesId(part);
+                            if (seriesId.Contains("- "))
+                            {
+                                remasteredName += seriesId + " ";
+                            }
+                            else
+                            {
+                                remasteredName += _uppercaseFirst(part) + " ";
+                            }
                         }
                     }
 
@@ -171,12 +187,69 @@ namespace MediaFileProcessor.Models
                 {
                     this.delimiter = this.delimiterOptions[0];
                 }
+
+                // If the year has been set add it to the end of the file name.
+                if (yr > 0)
+                {
+                    remasteredName = remasteredName + "(" + yr.ToString() + ")";
+                }
+
                 return remasteredName.Trim();
             }
             else
             {
                 //TODO: may end up here when changing a name                
                 return this.delimiterOptions[0];
+            }
+        }
+
+        private static string _uppercaseFirst(string s)
+        {
+            // Check for empty string.
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            // Return char and concat substring.
+            return char.ToUpper(s[0]) + s.Substring(1);
+        }
+
+        private static string _seriesId(string s)
+        {
+            // Check for empty string.
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+
+            if (char.ToLower(s[0]) == 's' && s.Length == 6)
+            {                        
+                var split = s.ToLower().Split('e');
+                if (split.Length == 2 && split[0].Length == 3)
+                {
+                    var season = split[0];
+                    var episode = split[1];
+                    int sNumber;
+                    int eNumber;
+                    if (int.TryParse(season.Substring(1), out sNumber) && int.TryParse(episode.Substring(1), out eNumber))
+                    {
+                        // Make sure the seasion and episode are in lower case.
+                        s = "s" + season.Substring(1) + "e" + episode;
+                        return "- " + s;
+                    }
+                    else
+                    {
+                        return s;
+                    }
+                }
+                else
+                {
+                    return s;
+                }
+            }
+            else
+            {
+                return s;
             }
         }
 

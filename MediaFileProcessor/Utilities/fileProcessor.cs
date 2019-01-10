@@ -89,7 +89,7 @@ namespace MediaFileProcessor.Utilities
             if (doDelete)
             {
                 if (Directory.GetFiles(file.parentFolderPath, "*", SearchOption.TopDirectoryOnly).Length == 0 &&
-                    Directory.GetDirectories(file.parentFolderName, "*", SearchOption.TopDirectoryOnly).Length == 0)
+                    Directory.GetDirectories(file.parentFolderPath, "*", SearchOption.TopDirectoryOnly).Length == 0)
                 {
                     Directory.Delete(file.parentFolderPath);
                 }
